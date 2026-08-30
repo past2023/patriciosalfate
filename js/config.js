@@ -18,7 +18,7 @@ export const SITE = {
   aboutFolder: 'about',   // photos/about — first photo becomes the portrait in "About"
 
   // ---- Galleries shown in the "Work" section ----------------
-  // Categories: portraits / fashion / interior / design & branding.
+  // Categories: portraits / fashion / interior / branding / design.
   // Each one is a folder inside /photos/ — drop photos in, they appear here.
   // Add a new category: create a folder photos/<slug> and add an entry here.
   galleries: [
@@ -26,6 +26,7 @@ export const SITE = {
     { slug: 'fashion',   span: 'b' },
     { slug: 'interior',  span: 'b' },
     { slug: 'branding',  span: 'a' },
+    { slug: 'design',    span: 'a' },
   ],
 
   // ---- Services (details live in js/i18n.js) ----------------

@@ -71,6 +71,7 @@ body{
   font-size: 16px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
 img{ display:block; max-width:100% }
@@ -1312,4 +1313,173 @@ html.light #starfield{ display: none }
   box-shadow: 0 0 24px rgba(255,46,166,.35);
   mix-blend-mode: screen; pointer-events: none;
   animation: fx-scan .8s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+/* ============================================================
+   Rev 7 — technical editorial motion system
+   Small, precise movements keep the site fashion-editorial rather than
+   noisy: most effects idle, then wake on hover/focus or at long intervals.
+   ============================================================ */
+
+:root{ --fx-cyan: #8cecf2; --fx-line: rgba(140,236,242,.34) }
+html.light{ --fx-line: rgba(229,7,140,.28) }
+
+/* Header and section rules behave like a slow instrument readout. */
+#site-header::after{
+  content:""; position:absolute; left:0; bottom:-1px; width:22%; height:1px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--fx-cyan), transparent);
+  animation: header-run 18s linear infinite;
+  pointer-events:none;
+}
+@keyframes header-run{
+  0%{ transform: translateX(-110%) scaleX(.55); opacity:0 }
+  8%,82%{ opacity:.8 }
+  100%{ transform: translateX(560%) scaleX(1.2); opacity:0 }
+}
+.sec-head{ position:relative }
+.sec-head::before{
+  content:""; position:absolute; left:0; bottom:-1px; width:clamp(46px, 8vw, 118px); height:2px;
+  transform-origin:left; background:linear-gradient(90deg, var(--accent), var(--fx-cyan), transparent);
+  animation: rule-breathe 11s ease-in-out infinite;
+  pointer-events:none;
+}
+.sec-head::after{
+  content:""; position:absolute; right:0; bottom:-3px; width:6px; height:6px;
+  border:1px solid var(--accent); transform:rotate(45deg);
+  animation: rule-node 7s ease-in-out infinite;
+  pointer-events:none;
+}
+.sec-head .idx::before{
+  content:"//"; margin-right:9px; color:var(--fx-cyan); opacity:.72;
+}
+@keyframes rule-breathe{
+  0%, 70%, 100%{ transform:scaleX(.55); opacity:.55 }
+  74%{ transform:scaleX(1); opacity:1 }
+  78%{ transform:scaleX(.72); opacity:.7 }
+}
+@keyframes rule-node{
+  0%, 72%, 100%{ transform:rotate(45deg) scale(.7); opacity:.45 }
+  76%{ transform:rotate(135deg) scale(1.35); opacity:1; box-shadow:0 0 0 4px var(--accent-soft) }
+  82%{ transform:rotate(225deg) scale(.7); opacity:.45; box-shadow:none }
+}
+.kicker::before{ transform-origin:left; animation:kicker-line 9s ease-in-out infinite }
+@keyframes kicker-line{
+  0%, 72%, 100%{ transform:scaleX(.62); opacity:.65 }
+  76%{ transform:scaleX(1); opacity:1 }
+  80%{ transform:scaleX(.78); opacity:.75 }
+}
+
+/* Editorial buttons get a controlled light sweep instead of a flat fill. */
+.btn{ overflow:hidden; isolation:isolate }
+.btn::before{
+  content:""; position:absolute; z-index:0; top:-70%; bottom:-70%; left:-45%; width:25%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.42), transparent);
+  transform:translateX(-180%) skewX(-18deg); opacity:0; pointer-events:none;
+}
+.btn > *{ position:relative; z-index:1 }
+.btn:hover::before, .btn:focus-visible::before{
+  opacity:1; animation:btn-sheen .85s var(--ease) both;
+}
+@keyframes btn-sheen{ to{ transform:translateX(760%) skewX(-18deg) } }
+.menu-nav a{ position:relative }
+.menu-nav a::after{
+  content:""; position:absolute; left:0; right:0; bottom:-.32em; height:1px;
+  background:linear-gradient(90deg, var(--accent), var(--fx-cyan), transparent);
+  transform:scaleX(0); transform-origin:right; transition:transform .65s var(--ease);
+}
+.menu-nav a:hover::after, .menu-nav a:focus-visible::after{ transform:scaleX(1); transform-origin:left }
+.p-kicker::after{
+  content:""; width:54px; height:1px; margin-left:4px;
+  background:linear-gradient(90deg, var(--accent), var(--fx-cyan), transparent);
+  transform-origin:left; animation:kicker-trace 10s ease-in-out infinite;
+}
+@keyframes kicker-trace{
+  0%, 72%, 100%{ transform:scaleX(.5); opacity:.5 }
+  77%{ transform:scaleX(1); opacity:1 }
+  82%{ transform:scaleX(.72); opacity:.7 }
+}
+.hm{ position:relative }
+.hm::before{
+  content:""; position:absolute; left:0; top:-1px; width:32px; height:1px;
+  background:linear-gradient(90deg, var(--accent), var(--fx-cyan), transparent);
+  animation:meta-trace 9s ease-in-out infinite;
+}
+@keyframes meta-trace{
+  0%, 70%, 100%{ width:28px; opacity:.55 }
+  76%{ width:100%; opacity:1 }
+  82%{ width:48%; opacity:.72 }
+}
+.foot-grid a{ position:relative; padding-bottom:5px }
+.foot-grid a::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:1px;
+  background:linear-gradient(90deg, var(--accent), var(--fx-cyan));
+  transform:scaleX(0); transform-origin:right; transition:transform .5s var(--ease);
+}
+.foot-grid a:hover::after, .foot-grid a:focus-visible::after{ transform:scaleX(1); transform-origin:left }
+
+/* One-corner brackets are shared by the image and information surfaces. */
+.gcard::before, .m-item::before, .vcard::before{
+  content:""; position:absolute; z-index:4; top:13px; left:13px; width:30px; height:30px;
+  border-top:1px solid var(--fx-cyan); border-left:1px solid var(--fx-cyan);
+  opacity:0; transform:translate(-5px, -5px); transition:opacity .45s var(--ease), transform .55s var(--ease);
+  pointer-events:none;
+}
+.gcard:hover::before, .gcard:focus-visible::before,
+.m-item:hover::before, .m-item:focus-visible::before,
+.vcard:hover::before, .vcard:focus-visible::before{ opacity:.9; transform:none }
+.gcard:focus-visible, .m-item:focus-visible, .vcard:focus-visible{ outline:2px solid var(--accent); outline-offset:4px }
+
+/* Fine lines that wake up on interactive data blocks. */
+.sv-row, .pstep, .stat, .pcard, .plist li, .proj, .tl-item,
+.ch, .pproc-item, .astat, .seats, .faq details, .cmp-wrap{
+  position:relative;
+}
+.sv-row::before, .pstep::before, .stat::before, .pcard::before,
+.proj::before, .tl-item::before, .ch::before, .pproc-item::before,
+.astat::before, .seats::before, .faq details::before, .cmp-wrap::before{
+  content:""; position:absolute; z-index:2; top:-1px; left:0; width:38px; height:1px;
+  background:linear-gradient(90deg, var(--accent), var(--fx-cyan), transparent);
+  transition:width .65s var(--ease), opacity .35s; opacity:.72; pointer-events:none;
+}
+.sv-row:hover::before, .sv-row.open::before, .pstep:hover::before, .stat:hover::before,
+.pcard:hover::before, .proj:hover::before, .tl-item:hover::before,
+.ch:hover::before, .pproc-item:hover::before, .astat:hover::before, .seats:hover::before,
+.faq details[open]::before, .cmp-wrap:hover::before{ width:100%; opacity:1 }
+.sv-row::after{
+  content:""; position:absolute; right:0; top:0; width:0; height:1px;
+  background:var(--fx-cyan); opacity:0; transition:width .55s var(--ease), opacity .3s; pointer-events:none;
+}
+.sv-row:hover::after, .sv-row.open::after{ width:24%; opacity:.7 }
+.sv-idx, .pstep .n, .tl-item .period{ text-shadow:0 0 12px var(--accent-soft) }
+
+/* Page heroes receive a barely-visible scan texture behind their copy. */
+.p-hero::after{
+  content:""; position:absolute; z-index:2; inset:0; pointer-events:none; opacity:.13;
+  background:repeating-linear-gradient(180deg, transparent 0 7px, var(--fx-line) 8px, transparent 9px);
+  mix-blend-mode:screen; animation:hero-scanlines 16s linear infinite;
+}
+@keyframes hero-scanlines{
+  0%{ background-position:0 -90px; opacity:0 }
+  10%,82%{ opacity:.13 }
+  100%{ background-position:0 90px; opacity:0 }
+}
+
+/* Marquee separators get a moving locator tick. */
+.marquee{ position:relative }
+.marquee::after{
+  content:""; position:absolute; left:0; top:-1px; width:54px; height:1px;
+  background:linear-gradient(90deg, var(--accent), var(--fx-cyan), transparent);
+  animation:marquee-tick 12s linear infinite; pointer-events:none;
+}
+@keyframes marquee-tick{
+  0%{ transform:translateX(-70px); opacity:0 }
+  12%,80%{ opacity:.85 }
+  100%{ transform:translateX(calc(100vw + 70px)); opacity:0 }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{ animation-duration:.001s !important; animation-iteration-count:1 !important; transition-duration:.001s !important }
+  #site-header::after, .sec-head::before, .sec-head::after, .kicker::before,
+  .p-kicker::after, .hm::before, .p-hero::after, .marquee::after{ animation:none !important }
+  .btn:hover::before, .btn:focus-visible::before{ animation:none }
 }

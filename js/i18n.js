@@ -55,6 +55,8 @@ const DICT = {
     'gallery.interior.desc': 'Отели, квартиры, рестораны и коммерция — кадры, которые продают',
     'gallery.branding.title': 'Дизайн и брендинг',
     'gallery.branding.desc': 'Логотипы, фирменный стиль, сайты и печать',
+    'gallery.design.title': 'Дизайн',
+    'gallery.design.desc': 'Визуальные концепции, интерфейсы и цифровые эксперименты',
 
     'ov.back': 'Назад',
     'ov.updated': 'обновлено {d}',
@@ -537,6 +539,8 @@ const DICT = {
     'gallery.interior.desc': 'Hotels, apartments, restaurants and commercial spaces',
     'gallery.branding.title': 'Design & branding',
     'gallery.branding.desc': 'Logos, brand identity, websites and print',
+    'gallery.design.title': 'Design',
+    'gallery.design.desc': 'Visual concepts, interfaces and digital experiments',
 
     'ov.back': 'Back',
     'ov.updated': 'updated {d}',

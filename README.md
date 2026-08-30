@@ -57,9 +57,11 @@ hosting:
 
 ```
 photos/
-├── photo/     → "Photography" gallery (portraits, interiors)
+├── portraits/ → "Portraits" gallery
 ├── fashion/   → "Fashion & commercial" gallery
-├── design/    → "Design & branding" gallery
+├── interior/  → "Interiors" gallery
+├── branding/  → "Design & branding" gallery
+├── design/    → "Design" gallery
 ├── hero/      → main-screen slideshow (wide 16:9 photos)
 └── about/     → first photo = portrait in the "About" block
 ```
@@ -124,8 +126,8 @@ node server/preview.mjs
 (`public_html` / `www`), including the hidden `photos/.htaccess`.
 Done — `https://patriciosalfate.ru`.
 
-> `photos/design/` ships with 4 demo layout mockups — replace them with your
-> own work (upload yours and delete `design_*.jpg`).
+> `photos/design/` is the dedicated Design gallery on the homepage. It ships
+> with 4 layout mockups — replace or extend them with your own work at any time.
 
 ## 📁 Structure
 
