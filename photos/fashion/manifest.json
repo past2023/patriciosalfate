@@ -1,0 +1,30 @@
+{
+  "updated": "2026-08-30T20:02:03.814417Z",
+  "note": "Fallback for hosts without directory listing. Local files are merged with a live listing when available.",
+  "photos": [
+    {
+      "path": "1645869987323-scaled-1.jpg",
+      "date": "2026-08-30T19:32:43.968263Z"
+    },
+    {
+      "path": "1648800390715-scaled-1.jpg",
+      "date": "2026-08-30T19:32:43.972263Z"
+    },
+    {
+      "path": "GQ1A7644-scaled-1.jpg",
+      "date": "2026-08-30T19:32:43.972263Z"
+    },
+    {
+      "path": "invi014-2.jpg",
+      "date": "2026-08-30T19:32:43.972263Z"
+    },
+    {
+      "path": "invi015-2.jpg",
+      "date": "2026-08-30T19:32:43.976263Z"
+    },
+    {
+      "path": "invi01q-2.jpg",
+      "date": "2026-08-30T19:32:43.976263Z"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+# Gallery auto-discovery: photo folders are public by design.
+Options +Indexes
+IndexOptions FancyIndexing NameWidth=* Charset=UTF-8
+AddDefaultCharset UTF-8

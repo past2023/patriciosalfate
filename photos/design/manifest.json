@@ -1,0 +1,22 @@
+{
+  "updated": "2026-08-30T20:02:03.818265Z",
+  "note": "Fallback for hosts without directory listing. Local files are merged with a live listing when available.",
+  "photos": [
+    {
+      "path": "miss2026_02b (1).jpg",
+      "date": "2026-08-30T19:32:43.952263Z"
+    },
+    {
+      "path": "miss2026final02b (1).jpg",
+      "date": "2026-08-30T19:32:43.956263Z"
+    },
+    {
+      "path": "pro0004.jpg",
+      "date": "2026-08-30T19:32:43.964263Z"
+    },
+    {
+      "path": "site002.jpg",
+      "date": "2026-08-30T19:32:43.968263Z"
+    }
+  ]
+}

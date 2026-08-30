@@ -1,0 +1,22 @@
+{
+  "updated": "2026-08-30T20:02:03.818595Z",
+  "note": "Fallback for hosts without directory listing. Local files are merged with a live listing when available.",
+  "photos": [
+    {
+      "path": "GQ1A5105-HDR-scaled-1.jpg",
+      "date": "2026-08-30T19:32:43.976263Z"
+    },
+    {
+      "path": "GQ1A5173-HDR-scaled-1.jpg",
+      "date": "2026-08-30T19:32:43.980263Z"
+    },
+    {
+      "path": "GQ1A8779-scaled-1.jpg",
+      "date": "2026-08-30T19:32:43.984263Z"
+    },
+    {
+      "path": "_1650434834818-scaled-1-2.jpg",
+      "date": "2026-08-30T19:32:43.984263Z"
+    }
+  ]
+}

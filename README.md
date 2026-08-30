@@ -22,31 +22,27 @@ The site has five full pages (same design system, RU/EN, both themes):
 | CV | `/cv/` | profile, skills, experience, education, languages, music, links |
 | Music | `/music/` | artist Patricio Salfate — direct links to Spotify, Apple Music, VK Music, Yandex Music, Deezer, Bandcamp |
 
-Photo-day and interior galleries use the same one-update system: their photos
-live in `photos/photonday/` and `photos/interior/` (currently bridged to the
-old site via `manifest.json`; uploaded files win by name).
+Photo-day and interior galleries use the same update system: their photos
+live in `photos/photonday/` and `photos/interior/`. Each gallery folder also
+ships with a local `manifest.json` fallback for hosts that do not expose a
+directory listing; live directory files still win by name when listing works.
 
 To add a page: copy any `cv/index.html`-style page, add its texts to
 `js/i18n.js` and a link to the header nav.
 
-## 📦 Photos from the previous site (temporary bridge)
+## 📦 Photos and gallery manifests
 
-The folders `photos/{photo,fashion,hero,about}/` contain a `manifest.json`
-with hotlinks to the real photos on the old site (patriciosalfate.ru), so the
-site already shows the actual work. **Any file you upload always wins over a
-manifest entry with the same file name.** Once all your photos are uploaded
-into the folders, simply delete the four `manifest.json` files — the site
-keeps working purely from the folder contents.
-
-The same bridge pattern is used for the header logo (hotlinked from the old
-site — see below), the page heroes and the page photo galleries.
+The gallery folders contain local `manifest.json` fallbacks so the included
+photos still appear on hosts where directory listing is disabled. **Any file
+you upload always wins over a manifest entry with the same file name** when a
+live listing is available. The `photos/about/manifest.json` file is a small
+portrait fallback; the other manifests list the local gallery assets.
 
 ## 🏷️ Logo
 
-The header logo is hotlinked from the old site. To make it live on the new
-hosting, download `logoamor01.jpg` and save it as `img/logo.jpg` — the site
-automatically switches to the local file. If the image ever fails to load,
-a "PS" monogram fallback is shown.
+The header logo is served locally from `photos/logoamor01.jpg`. Replace that
+file with your own logo if needed. If the image ever fails to load, a "PS"
+monogram fallback is shown.
 
 ---
 
@@ -68,16 +64,19 @@ photos/
 
 Drop JPG/PNG/WebP files into the file manager and:
 
-1. the site **finds them on its own** (reads the hosting directory listing —
-   names, sizes, dates);
-2. **thumbnails are drawn in the visitor's browser** on `<canvas>` and cached
+1. on a host with directory listing enabled, the site **finds them on its own**
+   (names, sizes and dates);
+2. on a host without listing, regenerate that gallery's `manifest.json` with
+   `tools/manifest.html` after uploading new files;
+3. **thumbnails are drawn in the visitor's browser** on `<canvas>` and cached
    in IndexedDB — nothing is generated on the server;
-3. new work **appears first** (sorted by file date); counters and the
+4. new work **appears first** (sorted by file date); counters and the
    "updated" dates recalculate automatically;
-4. subfolders inside a gallery are picked up too (up to 3 levels) — handy for
-   sorting shoots by date.
+5. subfolders inside a gallery are picked up too (up to 3 levels) when listing
+   is enabled — handy for sorting shoots by date.
 
-No "rebuild", no "upload a new file", no "edit a JSON" — **one folder, one system**.
+No rebuild is needed. A listing-enabled host needs only the photo upload; a
+host without listing needs the updated manifest uploaded alongside the photos.
 
 ### How it works, technically
 
@@ -91,9 +90,9 @@ Thumbnail = original → `createImageBitmap` → `<canvas>` → WebP → Indexed
 
 | Hosting | What is needed |
 |---|---|
-| **Apache** (Reg.ru, Beget, Timeweb, cPanel, most .ru hosts) | **Nothing.** `photos/.htaccess` with `Options +Indexes` and UTF-8 is already shipped. |
-| **Nginx** | One line in the site config (see below). |
-| **Static hosts** (Pages/Netlify/Vercel, etc., no listing) | Generate a `manifest.json` with [tools/manifest.html](tools/manifest.html) and put it into the gallery folder. |
+| **Apache** (Reg.ru, Beget, Timeweb, cPanel, most .ru hosts) | Upload the hidden `photos/.htaccess` file too. It enables `Options +Indexes` and UTF-8 listing for automatic updates. |
+| **Nginx** | Enable `autoindex on` in the site config (see below) for automatic updates. |
+| **Static hosts** (Pages/Netlify/Vercel, etc., no listing) | The shipped manifests show the included photos; regenerate one with [tools/manifest.html](tools/manifest.html) after adding photos. |
 
 **Nginx** — add to `server { ... }`:
 
@@ -104,13 +103,13 @@ location /photos/ {
 }
 ```
 
-**Static hosting without listing** — open `tools/manifest.html` in the
-browser, select the photo folder (files are never sent anywhere), download
-the `manifest.json` and upload it into the gallery folder (e.g.
-`photos/photo/manifest.json`). A manifest may also contain **remote (absolute)
-URLs** — that is exactly how the temporary bridge to the old site works.
-When a directory listing is available, it is **merged** with the manifest and
-local files win by name.
+**Hosting without listing** — the repository already includes manifests for
+its local galleries. After adding or replacing photos on such a host, open
+`tools/manifest.html` in the browser, select the photo folder (files are never
+sent anywhere), download the new `manifest.json`, and upload it into that
+folder. A manifest may also contain **remote (absolute) URLs** when a project
+needs them. When a directory listing is available, it is **merged** with the
+manifest and local files win by name.
 
 ---
 
@@ -123,8 +122,8 @@ node server/preview.mjs
 ```
 
 **Deploy:** upload the whole repository content to the site root
-(`public_html` / `www`), including the hidden `photos/.htaccess`.
-Done — `https://patriciosalfate.ru`.
+(`public_html` / `www`), including hidden files such as `photos/.htaccess` and
+the gallery `manifest.json` files. Done — `https://patriciosalfate.ru`.
 
 > `photos/design/` is the dedicated Design gallery on the homepage. It ships
 > with 4 layout mockups — replace or extend them with your own work at any time.
