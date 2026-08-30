@@ -833,11 +833,53 @@ html.light .theme-btn .ico-moon{ display: none }
 /* ---------- footer ---------- */
 footer{ border-top: 1px solid var(--line); padding: 40px 0 34px; position: relative; overflow: hidden }
 .foot-word{
-  font-family: var(--font-x); font-weight: 700; text-transform: uppercase;
+  position: relative; font-family: var(--font-x); font-weight: 700; text-transform: uppercase;
   font-size: clamp(3rem, 11vw, 10.5rem); line-height: .9; letter-spacing: .01em;
-  color: var(--ghost); -webkit-text-stroke: .05em currentColor;  /* same heavy treatment as the hero title */
+  color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: clamp(1px, .025em, 3px) var(--ghost);
   white-space: nowrap; user-select: none;
   margin-bottom: 44px;
+  animation: foot-word-fx 14s ease-in-out infinite;
+  will-change: transform, filter;
+}
+/* The base stays quiet; these two clipped copies create a brief RGB/data
+   glitch roughly once every fourteen seconds instead of constant motion. */
+.foot-word::before, .foot-word::after{
+  content: attr(data-text); position: absolute; inset: 0;
+  color: transparent; -webkit-text-fill-color: transparent;
+  pointer-events: none; opacity: 0; white-space: inherit;
+  -webkit-text-stroke: clamp(1px, .025em, 3px) var(--accent);
+  will-change: transform, clip-path, opacity;
+}
+.foot-word::before{ animation: foot-word-slice-a 14s steps(1, end) infinite }
+.foot-word::after{
+  -webkit-text-stroke-color: #8cecf2;
+  animation: foot-word-slice-b 14s steps(1, end) infinite;
+}
+@keyframes foot-word-fx{
+  0%, 76%, 100%{ transform: translate3d(0, 0, 0); filter: none }
+  78%{ transform: translate3d(.012em, 0, 0); filter: drop-shadow(0 0 14px var(--accent-soft)) }
+  79%{ transform: translate3d(-.008em, 0, 0); filter: none }
+  81%{ transform: translate3d(0, 0, 0); filter: drop-shadow(0 0 7px var(--accent-soft)) }
+  83%{ transform: translate3d(0, 0, 0); filter: none }
+}
+@keyframes foot-word-slice-a{
+  0%, 75%, 100%{ opacity: 0; clip-path: inset(0 0 0 0); transform: translate3d(0, 0, 0) }
+  77%{ opacity: .9; clip-path: inset(9% 0 63% 0); transform: translate3d(-.018em, .012em, 0) }
+  79%{ opacity: 0; clip-path: inset(0 0 0 0); transform: none }
+  81%{ opacity: .72; clip-path: inset(66% 0 12% 0); transform: translate3d(.024em, -.008em, 0) }
+  83%{ opacity: 0 }
+}
+@keyframes foot-word-slice-b{
+  0%, 76%, 100%{ opacity: 0; clip-path: inset(0 0 0 0); transform: translate3d(0, 0, 0) }
+  78%{ opacity: .72; clip-path: inset(41% 0 36% 0); transform: translate3d(.02em, -.01em, 0) }
+  80%{ opacity: 0; clip-path: inset(0 0 0 0); transform: none }
+  82%{ opacity: .8; clip-path: inset(16% 0 70% 0); transform: translate3d(-.028em, .006em, 0) }
+  84%{ opacity: 0 }
+}
+@media (prefers-reduced-motion: reduce){
+  .foot-word, .foot-word::before, .foot-word::after{ animation: none !important }
+  .foot-word::before, .foot-word::after{ display: none }
 }
 .foot-grid{ display: flex; flex-wrap: wrap; gap: 18px 40px; align-items: center; justify-content: space-between }
 .foot-grid a{ font-family: var(--font-m); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); transition: color .3s }
