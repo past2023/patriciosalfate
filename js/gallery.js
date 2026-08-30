@@ -490,10 +490,9 @@ class Lightbox {
     this.bmp = null;
     this.full = false;
     this.touched = false;
-    /* Start immersive: the photo fills the viewport instead of appearing
-       as a small "contained" rectangle. The fit button still exposes the
-       whole uncropped photo when that is what the viewer wants. */
-    this.fitMode = 'cover';
+    /* Preserve the whole photograph by default. The viewer can switch to an
+       immersive edge-to-edge crop with the fit/fill button when desired. */
+    this.fitMode = 'contain';
     this.s = 1; this.fit = 1; this.tx = 0; this.ty = 0;
     this.vw = 0; this.vh = 0; this.dpr = 1;
     this.pointers = new Map();
@@ -501,6 +500,7 @@ class Lightbox {
     this.dragging = null;
     this.swipe = null;
     this._fullCache = new Map();
+    this._fullPending = new Map();
     this._returnFocus = null;
     this._bodyOverflow = '';
     this._loadToken = 0;
@@ -548,6 +548,7 @@ class Lightbox {
       } else if (this.pointers.size === 2 && this.pinched) {
         const [a, b] = [...this.pointers.values()];
         const d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (!d || !this.pinched.d) return;
         const mx = (a.x + b.x) / 2 - r.left;
         const my = (a.y + b.y) / 2 - r.top;
         const target = clamp(this.pinched.s * (d / this.pinched.d), this.fit, this.fit * 9);
@@ -639,7 +640,7 @@ class Lightbox {
         ? document.activeElement
         : null;
       this._bodyOverflow = document.body.style.overflow;
-      this.fitMode = 'cover';
+      this.fitMode = 'contain';
     }
   }
 
@@ -647,6 +648,9 @@ class Lightbox {
     if (!this.isOpen) return;
     this.isOpen = false;
     this._loadToken++;
+    this.bmp = null;
+    this.full = false;
+    this.clearCanvas();
     this.root.classList.remove('open');
     /* The lightbox is shared by the homepage overlay and the standalone
        pages. Do not dereference a missing overlay, and restore the exact
@@ -654,6 +658,7 @@ class Lightbox {
     if (!overlay || !overlay.classList.contains('open')) document.body.style.overflow = this._bodyOverflow;
     this._fullCache.forEach((b) => b && b.close && b.close());
     this._fullCache.clear();
+    this._fullPending.clear();
     this.pointers.clear();
     this.dragging = null;
     this.pinched = null;
@@ -675,6 +680,7 @@ class Lightbox {
     this.touched = false;
     this.full = false;
     this.bmp = null;
+    this.clearCanvas();
     this.root.querySelector('#lb-err').classList.remove('on');
     this.root.querySelector('#lb-load').classList.add('on');
 
@@ -711,46 +717,21 @@ class Lightbox {
     try {
       let bmp = this._fullCache.get(p.url);
       if (!bmp) {
-        const sameOrigin = (() => {
-          try { return new URL(p.url).origin === location.origin; } catch (_) { return false; }
-        })();
-        bmp = await (async () => {
-          if (!sameOrigin) {
-            /* cross-origin: plain <img> load (canvas can still render it) */
-            return await new Promise((resolve, reject) => {
-              const x = new Image();
-              x.onload = () => resolve(x);
-              x.onerror = () => reject(new Error('image load failed'));
-              x.src = p.url;
-            });
-          }
-          const res = await fetch(p.url, { cache: 'force-cache' });
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          const blob = await res.blob();
-          if ('createImageBitmap' in window) {
-            try { return await createImageBitmap(blob); } catch (_) {}
-          }
-          const u = URL.createObjectURL(blob);
-          const im = await new Promise((resolve, reject) => {
-            const x = new Image();
-            x.onload = () => resolve(x);
-            x.onerror = reject;
-            x.src = u;
-          });
-          setTimeout(() => URL.revokeObjectURL(u), 5000);
-          return im;
-        })();
-        if (!this.isOpen || token !== this._loadToken) {
-          if (bmp && bmp.close) bmp.close();
-          return;
+        /* The current image and a neighbor can request the same file at the
+           same time. Share one promise so a preload cannot race the active
+           request or evict its bitmap. */
+        let pending = this._fullPending.get(p.url);
+        if (!pending) {
+          pending = this.fetchFull(p);
+          this._fullPending.set(p.url, pending);
+          const clearPending = () => {
+            if (this._fullPending.get(p.url) === pending) this._fullPending.delete(p.url);
+          };
+          pending.then(clearPending, clearPending);
         }
-        if (this._fullCache.size >= 4) {
-          const first = this._fullCache.keys().next().value;
-          const old = this._fullCache.get(first);
-          if (old && old.close) old.close();
-          this._fullCache.delete(first);
-        }
-        this._fullCache.set(p.url, bmp);
+        bmp = await pending;
+        if (!this.isOpen || token !== this._loadToken) return;
+        this.cacheFull(p.url, bmp);
       }
       /* Neighbor preloads use -1 intentionally: they warm the cache but
          must never replace the image currently on screen. */
@@ -764,6 +745,52 @@ class Lightbox {
         if (!this.bmp) this.root.querySelector('#lb-err').classList.add('on');
       }
     }
+  }
+
+  async fetchFull(p) {
+    const sameOrigin = (() => {
+      try { return new URL(p.url).origin === location.origin; } catch (_) { return false; }
+    })();
+    if (!sameOrigin) {
+      /* Cross-origin: plain <img> load (canvas can still render it). */
+      return await new Promise((resolve, reject) => {
+        const x = new Image();
+        x.onload = () => resolve(x);
+        x.onerror = () => reject(new Error('image load failed'));
+        x.src = p.url;
+      });
+    }
+    const res = await fetch(p.url, { cache: 'force-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const blob = await res.blob();
+    if ('createImageBitmap' in window) {
+      try { return await createImageBitmap(blob); } catch (_) {}
+    }
+    const u = URL.createObjectURL(blob);
+    try {
+      return await new Promise((resolve, reject) => {
+        const x = new Image();
+        x.onload = () => resolve(x);
+        x.onerror = reject;
+        x.src = u;
+      });
+    } finally {
+      setTimeout(() => URL.revokeObjectURL(u), 5000);
+    }
+  }
+
+  cacheFull(url, bmp) {
+    if (this._fullCache.has(url)) return;
+    while (this._fullCache.size >= 6) {
+      /* Never close the bitmap currently being drawn. */
+      const currentUrl = this.photos[this.i] && this.photos[this.i].url;
+      const removable = [...this._fullCache.keys()].find((key) => key !== currentUrl);
+      if (!removable) break;
+      const old = this._fullCache.get(removable);
+      if (old && old.close) old.close();
+      this._fullCache.delete(removable);
+    }
+    this._fullCache.set(url, bmp);
   }
 
   preloadNeighbors() {
@@ -799,9 +826,8 @@ class Lightbox {
   applyFit(hard) {
     const [iw, ih] = this._size();
     if (!iw || !ih || !this.vw || !this.vh) return;
-    /* `cover` is the deliberate default for an immersive portfolio viewer:
-       the canvas is genuinely filled edge to edge. `contain` is available
-       from the fit button for a completely uncropped view. */
+    /* Keep the complete image visible by default. `cover` remains available
+       from the fit/fill button for an immersive edge-to-edge crop. */
     this.fit = this.fitMode === 'cover'
       ? Math.max(this.vw / iw, this.vh / ih)
       : Math.min(this.vw / iw, this.vh / ih);
@@ -865,11 +891,16 @@ class Lightbox {
     this.root.querySelector('#lb-zoom').textContent = '100%';
   }
 
-  render() {
-    if (!this.bmp) return;
+  clearCanvas() {
     const c = this.ctx;
     c.setTransform(1, 0, 0, 1, 0, 0);
     c.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  render() {
+    if (!this.bmp) return;
+    const c = this.ctx;
+    this.clearCanvas();
     c.imageSmoothingEnabled = true;
     c.imageSmoothingQuality = 'high';
     c.setTransform(this.dpr * this.s, 0, 0, this.dpr * this.s, this.dpr * this.tx, this.dpr * this.ty);
