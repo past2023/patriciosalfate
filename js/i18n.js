@@ -6,8 +6,8 @@ import { bus } from './util.js';
 
 const DICT = {
   ru: {
-    'meta.title': 'Патрисио Сальфате — фотограф и дизайнер, Санкт-Петербург',
-    'meta.desc': 'Фотограф и дизайнер в Санкт-Петербурге. Портрет, интерьер, фэшн, брендинг, сайты. 17+ лет опыта, работа по России и за рубежом.',
+    'meta.title': 'Патрисио Сальфате — фотограф и дизайнер в Санкт-Петербурге',
+    'meta.desc': 'Фотограф, видеограф и дизайнер в Санкт-Петербурге. Портреты, интерьерная и фэшн-съёмка, брендинг и сайты. 17+ лет опыта.',
     'a11y.skip': 'К содержанию',
     'a11y.hero': 'Патрисио Сальфате',
     'pre.label': 'Портфолио — Санкт-Петербург',
@@ -177,7 +177,7 @@ const DICT = {
 
     /* ---- page: ФотоДень ---- */
     'pg.pd.meta.title': 'ФотоДень — фотосессия в отеле, Санкт-Петербург',
-    'pg.pd.meta.desc': 'Профессиональная фотосессия в роскошном отеле Санкт-Петербурга. Для моделей, блогеров и личного портфолио.',
+    'pg.pd.meta.desc': 'ФотоДень в Санкт-Петербурге: профессиональная фотосессия в отеле для моделей, блогеров и личного портфолио.',
     'pg.pd.kicker': 'Портфолио — съёмки',
     'pg.pd.h1': 'ФотоДень',
     'pg.pd.sub': 'Профессиональная фотосессия в роскошном отеле Санкт-Петербурга — идеально для моделей, блогеров и красивого личного портфолио.',
@@ -303,8 +303,8 @@ const DICT = {
     'pg.pd.final.t': 'Готовы создать что-то прекрасное?',
 
     /* ---- page: интерьерная фотосъёмка ---- */
-    'pg.in.meta.title': 'Интерьерная фотосъёмка — отели, квартиры, рестораны',
-    'pg.in.meta.desc': 'Съёмка интерьеров и архитектуры: отели, недвижимость, рестораны. Проекты в России и Чили.',
+    'pg.in.meta.title': 'Интерьерная фотосъёмка в Санкт-Петербурге — Патрисио Сальфате',
+    'pg.in.meta.desc': 'Фотосъёмка интерьеров и архитектуры в Санкт-Петербурге: отели, квартиры, рестораны и коммерческие пространства для сайтов и площадок.',
     'pg.in.kicker': 'Портфолио — интерьер',
     'pg.in.h1': 'Интерьерная фотосъёмка',
     'pg.in.sub': 'Отели, квартиры, рестораны и коммерческие пространства — кадры, которые продают и сдают.',
@@ -364,8 +364,8 @@ const DICT = {
     'pg.in.cta': 'Обсудить проект',
 
     /* ---- page: веб-дизайн ---- */
-    'pg.wd.meta.title': 'Веб-дизайн — сайты под ключ',
-    'pg.wd.meta.desc': 'Полный цикл: идея → структура → дизайн → верстка → запуск. Лендинги, магазины, платформы онлайн-курсов, анимированные и игровые сайты.',
+    'pg.wd.meta.title': 'Веб-дизайн и разработка сайтов — Патрисио Сальфате',
+    'pg.wd.meta.desc': 'Веб-дизайн и разработка сайтов под ключ: структура, интерфейс, адаптивная верстка, WordPress и запуск проекта.',
     'pg.wd.kicker': 'Услуги — веб',
     'pg.wd.h1': 'Веб-дизайн',
     'pg.wd.sub': 'Полный цикл: идея → структура → дизайн → верстка → запуск. От лендинга до сложного интерактивного сайта.',
@@ -414,8 +414,8 @@ const DICT = {
     'pg.wd.ctaSub': 'Напишите — обсудим задачу и сроки.',
 
     /* ---- page: CV ---- */
-    'pg.cv.meta.title': 'CV — Патрисио Сальфате',
-    'pg.cv.meta.desc': 'Патрисио Сальфате Траславинья — фотограф, AI-визуальный художник, видео-креатор, веб-разработчик и продюсер электронной музыки.',
+    'pg.cv.meta.title': 'Патрисио Сальфате — CV фотографа и дизайнера',
+    'pg.cv.meta.desc': 'CV Патрисио Сальфате: фотограф, видеограф, дизайнер, веб-разработчик, AI-визуальный художник и музыкальный продюсер.',
     'pg.cv.kicker': 'Портфолио — резюме',
     'pg.cv.h1': 'CV',
     'pg.cv.sub': 'Патрисио Сальфате Траславинья — фотограф, AI-визуальный художник, видео-креатор, веб-разработчик и продюсер электронной музыки.',
@@ -473,8 +473,8 @@ const DICT = {
     'pg.cv.l.mail': 'Почта',
 
     /* ---- page: музыка ---- */
-    'pg.mu.meta.title': 'Музыка — Patricio Salfate',
-    'pg.mu.meta.desc': 'Patricio Salfate — продюсер и композитор. Retro-futurism electro-dream: new wave, dream pop, кинематографичные синтезаторы.',
+    'pg.mu.meta.title': 'Патрисио Сальфате — музыка, продюсер и композитор',
+    'pg.mu.meta.desc': 'Музыка Патрисио Сальфате: продюсер и композитор. Электроника, new wave, dream pop и кинематографичные синтезаторы.',
     'pg.mu.kicker': 'Искусство — музыка',
     'pg.mu.h1': 'Музыка',
     'pg.mu.sub': 'Retro-futurism electro-dream — new wave, кинематографичный dream pop, синтезированные текстуры и коллаборации с вокалистами.',
@@ -490,8 +490,8 @@ const DICT = {
   },
 
   en: {
-    'meta.title': 'Patricio Salfate — Photographer & Designer, Saint Petersburg',
-    'meta.desc': 'Photographer & designer in Saint Petersburg. Portraits, interiors, fashion, branding, websites. 17+ years of experience, projects in Russia and abroad.',
+    'meta.title': 'Patricio Salfate — photographer and designer in Saint Petersburg',
+    'meta.desc': 'Photographer, videographer and designer in Saint Petersburg. Portrait, interior and fashion shoots, branding and websites. 17+ years of experience.',
     'a11y.skip': 'Skip to content',
     'a11y.hero': 'Patricio Salfate',
     'pre.label': 'Portfolio — Saint Petersburg',
@@ -660,8 +660,8 @@ const DICT = {
     'pg.gal': 'Gallery',
 
     /* ---- page: Photo Day ---- */
-    'pg.pd.meta.title': 'Photo Day — hotel photoshoot, Saint Petersburg',
-    'pg.pd.meta.desc': 'A professional photoshoot in a luxury Saint Petersburg hotel. For models, bloggers and a personal portfolio.',
+    'pg.pd.meta.title': 'Photo Day — hotel photoshoot in Saint Petersburg',
+    'pg.pd.meta.desc': 'Photo Day in Saint Petersburg: a professional hotel photoshoot for models, bloggers and personal portfolios.',
     'pg.pd.kicker': 'Portfolio — shoots',
     'pg.pd.h1': 'Photo Day',
     'pg.pd.sub': 'A professional photoshoot in a luxury Saint Petersburg hotel — perfect for models, bloggers and a beautiful personal portfolio.',
@@ -787,8 +787,8 @@ const DICT = {
     'pg.pd.final.t': 'Ready to create something beautiful?',
 
     /* ---- page: interior photography ---- */
-    'pg.in.meta.title': 'Interior photography — hotels, apartments, restaurants',
-    'pg.in.meta.desc': 'Interior and architecture photography: hotels, real estate, restaurants. Projects in Russia and Chile.',
+    'pg.in.meta.title': 'Interior photography in Saint Petersburg — Patricio Salfate',
+    'pg.in.meta.desc': 'Interior and architecture photography in Saint Petersburg for hotels, apartments, restaurants and commercial spaces.',
     'pg.in.kicker': 'Portfolio — interior',
     'pg.in.h1': 'Interior photography',
     'pg.in.sub': 'Hotels, apartments, restaurants and commercial spaces — shots that sell and rent.',
@@ -848,8 +848,8 @@ const DICT = {
     'pg.in.cta': 'Discuss a project',
 
     /* ---- page: web design ---- */
-    'pg.wd.meta.title': 'Web design — websites turnkey',
-    'pg.wd.meta.desc': 'Full cycle: idea → structure → design → markup → launch. Landing pages, shops, online-course platforms, animated and game sites.',
+    'pg.wd.meta.title': 'Web design and website development — Patricio Salfate',
+    'pg.wd.meta.desc': 'Web design and turnkey website development: structure, interface, responsive code, WordPress and launch.',
     'pg.wd.kicker': 'Services — web',
     'pg.wd.h1': 'Web Design',
     'pg.wd.sub': 'Full cycle: idea → structure → design → markup → launch. From a landing page to a complex interactive site.',
@@ -898,8 +898,8 @@ const DICT = {
     'pg.wd.ctaSub': 'Write to me — we will discuss the task and the timeline.',
 
     /* ---- page: CV ---- */
-    'pg.cv.meta.title': 'CV — Patricio Salfate',
-    'pg.cv.meta.desc': 'Patricio Salfate Traslaviña — photographer, AI visual artist, video creator, web developer and electronic music producer.',
+    'pg.cv.meta.title': 'Patricio Salfate — photographer and designer CV',
+    'pg.cv.meta.desc': 'Patricio Salfate CV: photographer, videographer, designer, web developer, AI visual artist and music producer.',
     'pg.cv.kicker': 'Portfolio — CV',
     'pg.cv.h1': 'CV',
     'pg.cv.sub': 'Patricio Salfate Traslaviña — photographer, AI visual artist, video creator, web developer and electronic music producer.',
@@ -957,8 +957,8 @@ const DICT = {
     'pg.cv.l.mail': 'Email',
 
     /* ---- page: music ---- */
-    'pg.mu.meta.title': 'Music — Patricio Salfate',
-    'pg.mu.meta.desc': 'Patricio Salfate — producer and composer. Retro-futurism electro-dream: new wave, dream pop, cinematic synths.',
+    'pg.mu.meta.title': 'Patricio Salfate — music producer and composer',
+    'pg.mu.meta.desc': 'Music by Patricio Salfate: producer and composer. Electronic, new wave, dream pop and cinematic synthesizers.',
     'pg.mu.kicker': 'Art — music',
     'pg.mu.h1': 'Music',
     'pg.mu.sub': 'Retro-futurism electro-dream — new wave, cinematic dream pop, synthesized textures and collaborations with vocalists.',
@@ -1028,6 +1028,12 @@ export function applyLang() {
   if (ogT) ogT.content = t(titleKey);
   const ogD = document.querySelector('meta[property="og:description"]');
   if (ogD) ogD.content = t(descKey);
+  const twitterT = document.querySelector('meta[name="twitter:title"]');
+  if (twitterT) twitterT.content = t(titleKey);
+  const twitterD = document.querySelector('meta[name="twitter:description"]');
+  if (twitterD) twitterD.content = t(descKey);
+  const ogLocale = document.querySelector('meta[property="og:locale"]');
+  if (ogLocale) ogLocale.content = lang === 'ru' ? 'ru_RU' : 'en_US';
 }
 
 export function setLang(l, { push = true } = {}) {
