@@ -1,7 +1,7 @@
 {
   "updated": "2026-08-27T12:00:00Z",
-  "note": "Временная ссылка на портрет со старого сайта (patriciosalfate.ru). После загрузки своего портрета в эту папку удалите этот файл.",
+  "note": "Локальный fallback для хостинга без листинга каталогов. Файл также лежит в этой папке.",
   "photos": [
-    { "path": "https://patriciosalfate.ru/wp-content/uploads/2022/11/GQ1A4745_patricio-scaled-1.jpg", "thumb": "https://patriciosalfate.ru/wp-content/uploads/2022/11/GQ1A4745_patricio-scaled-1-1024x1024.jpg", "date": "2022-11-20" }
+    { "path": "GQ1A4745_patricio-scaled-1.jpg", "date": "2022-11-20" }
   ]
 }
