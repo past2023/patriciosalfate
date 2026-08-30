@@ -173,8 +173,10 @@ photos/             ← UPLOAD YOUR PHOTOS HERE
 
 ## 🧠 Features
 
-- **Canvas lightbox**: smooth wheel zoom (towards the cursor), drag-pan,
-  pinch on phones, double click, keys ←/→/Esc/+/-/0, "download original".
+- **Canvas lightbox**: immersive edge-to-edge opening (with an optional
+  uncropped "show whole photo" toggle), smooth wheel/button zoom towards the
+  cursor, drag-pan, pinch on phones, double click, keys ←/→/Esc/+/-/0,
+  keyboard-friendly controls and "download original".
 - **Hero slideshow** from `photos/hero` with Ken Burns; if the folder is
   empty — canvas aurora.
 - **Laser sweep** across the hero photo and over work cards on hover —

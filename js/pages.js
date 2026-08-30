@@ -39,16 +39,42 @@ async function initPhotoGrid(sel, folder) {
       getThumbUrl(p, 700)
         .then((url) => {
           const img = fig.querySelector('img');
-          img.src = url;
+          const showImage = (src) => {
+            img.src = src;
+            img.onload = () => {
+              fig.querySelector('.skel')?.remove();
+              img.classList.add('ld');
+              setSpan(fig);
+            };
+            img.onerror = () => {
+              if (src !== p.url) {
+                img.onerror = null;
+                img.src = p.url;
+              }
+            };
+          };
+          showImage(url);
+        })
+        .catch(() => {
+          const img = fig.querySelector('img');
+          img.src = p.url;
           img.onload = () => {
             fig.querySelector('.skel')?.remove();
             img.classList.add('ld');
             setSpan(fig);
           };
-          img.onerror = () => fig.remove();
-        })
-        .catch(() => fig.remove());
-      fig.addEventListener('click', () => lb.openPhotos(photos, i));
+        });
+      const openPhoto = () => lb.openPhotos(photos, i);
+      fig.addEventListener('click', openPhoto);
+      fig.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openPhoto();
+        }
+      });
+      fig.tabIndex = 0;
+      fig.setAttribute('role', 'button');
+      fig.setAttribute('aria-label', p.name);
     });
 
     /* keep spans correct when the responsive column width changes */

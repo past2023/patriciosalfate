@@ -123,16 +123,31 @@ async function buildWorkGrid() {
 
     if (cover) {
       const img = card.querySelector('img');
+      const showCover = (url) => {
+        img.src = url;
+        img.onload = () => img.classList.add('ld');
+        img.onerror = () => {
+          if (url !== cover.url) {
+            img.onerror = null;
+            img.src = cover.url;
+          }
+        };
+      };
       getThumbUrl(cover, 900)
-        .then((url) => {
-          img.src = url;
-          img.onload = () => img.classList.add('ld');
-          img.onerror = () => img.remove();
-        })
-        .catch(() => {});
+        .then(showCover)
+        .catch(() => showCover(cover.url));
     }
 
-    card.addEventListener('click', () => openOverlay(g.slug));
+    const openCard = () => openOverlay(g.slug);
+    card.addEventListener('click', openCard);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openCard();
+      }
+    });
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
     card.setAttribute('data-cursor', 'open');
     grid.appendChild(card);
   });
@@ -276,19 +291,40 @@ function renderOverlayGrid(entry) {
       <img alt="${esc(p.name)}" loading="lazy" decoding="async">
       <figcaption><span>${esc(p.name)}</span><span>${humanSize(p.size)}</span></figcaption>`;
     const img = fig.querySelector('img');
+    const showThumb = (url, release = false) => {
+      if (state.openSlug !== slug) {
+        if (release && url) releaseThumbs([url]);
+        return;
+      }
+      img.src = url;
+      img.onload = () => { img.classList.add('ld'); setMSpan(fig); };
+      img.onerror = () => {
+        /* A generated thumbnail can fail independently of the original.
+           Keep the tile usable instead of silently removing it. */
+        if (url !== p.url) {
+          img.onerror = null;
+          img.src = p.url;
+        }
+      };
+      if (release && url.startsWith('blob:')) state.overlayUrls.push(url);
+    };
     getThumbUrl(p, 720)
-      .then((url) => {
-        if (state.openSlug !== slug) return;
-        img.src = url;
-        img.onload = () => { img.classList.add('ld'); setMSpan(fig); };
-        img.onerror = () => fig.remove();
-        state.overlayUrls.push(url);
-      })
-      .catch(() => {});
-    fig.addEventListener('click', () => {
+      .then((url) => showThumb(url, true))
+      .catch(() => showThumb(p.url));
+    const openPhoto = () => {
       if (!lightbox) buildLightbox();
       lightbox.open(slug, i);
+    };
+    fig.addEventListener('click', openPhoto);
+    fig.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openPhoto();
+      }
     });
+    fig.tabIndex = 0;
+    fig.setAttribute('role', 'button');
+    fig.setAttribute('aria-label', prettyName(p.name));
     masonry.appendChild(fig);
   });
   wrap.appendChild(masonry);
@@ -310,12 +346,15 @@ async function rescan() {
 }
 
 function closeOverlay() {
+  if (!overlay) return;
   if (lbOpen()) lightbox.close();
   overlay.classList.remove('open');
   document.body.classList.remove('ov-open');
   state.openSlug = null;
   document.body.style.overflow = '';
-  setTimeout(() => releaseThumbs(state.overlayUrls), 800);
+  /* Release immediately: waiting for the slide-out animation leaves a race
+     where a quick reopen can reuse a URL that is revoked mid-transition. */
+  releaseThumbs(state.overlayUrls);
   state.overlayUrls = [];
 }
 
@@ -345,9 +384,21 @@ function buildLightbox() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5l7 7-7 7"/></svg>
     </button>
     <div class="lb-bottom">
-      <span class="lb-name" id="lb-name"></span>
-      <span class="lb-zoom" id="lb-zoom">100%</span>
+      <div class="lb-caption">
+        <span class="lb-name" id="lb-name"></span>
+        <span class="lb-hint" data-i18n="lb.hint">колесо — зум · драг — перемещение</span>
+      </div>
       <div class="lb-ctrl">
+        <span class="lb-zoom" id="lb-zoom">100%</span>
+        <button class="icon-btn" id="lb-zoom-out" data-i18n-aria="lb.zoomOut" data-i18n-title="lb.zoomOut" aria-label="Zoom out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14"/></svg>
+        </button>
+        <button class="icon-btn lb-fit" id="lb-fit" data-i18n-aria="lb.fit" data-i18n-title="lb.fit" aria-label="Show the whole photo">
+          <svg class="fit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+        </button>
+        <button class="icon-btn" id="lb-zoom-in" data-i18n-aria="lb.zoomIn" data-i18n-title="lb.zoomIn" aria-label="Zoom in">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
         <a class="icon-btn" id="lb-dl" data-i18n-aria="lb.download" data-i18n-title="lb.download" aria-label="Download" download>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4v11m0 0l-4-4m4 4l4-4"/><path d="M5 19h14"/></svg>
         </a>
@@ -358,11 +409,62 @@ function buildLightbox() {
   el.querySelector('#lb-close').addEventListener('click', () => lightbox.close());
   el.querySelector('#lb-prev').addEventListener('click', () => lightbox.prev());
   el.querySelector('#lb-next').addEventListener('click', () => lightbox.next());
+  el.querySelector('#lb-zoom-out').addEventListener('click', () => lightbox.zoomStep(1 / 1.3));
+  el.querySelector('#lb-zoom-in').addEventListener('click', () => lightbox.zoomStep(1.3));
+  el.querySelector('#lb-fit').addEventListener('click', () => lightbox.toggleFit());
   document.addEventListener('keydown', onLbKey);
+  refreshLightboxLang();
+  bus.on('lang', refreshLightboxLang);
+}
+
+function refreshLightboxLang() {
+  if (!lightbox) return;
+  const root = lightbox.root;
+  const labels = [
+    ['#lb-close', 'lb.close'],
+    ['#lb-prev', 'lb.prev'],
+    ['#lb-next', 'lb.next'],
+    ['#lb-zoom-out', 'lb.zoomOut'],
+    ['#lb-zoom-in', 'lb.zoomIn'],
+    ['#lb-dl', 'lb.download'],
+  ];
+  labels.forEach(([selector, key]) => {
+    const el = root.querySelector(selector);
+    if (el) {
+      const label = t(key);
+      el.setAttribute('aria-label', label);
+      el.setAttribute('title', label);
+    }
+  });
+  const error = root.querySelector('#lb-err span');
+  if (error) error.textContent = t('lb.error');
+  const hint = root.querySelector('.lb-hint');
+  if (hint) hint.textContent = t('lb.hint');
+  lightbox.syncFitControl();
 }
 
 function onLbKey(e) {
   if (!lightbox || !lightbox.isOpen) return;
+  if (e.key === 'Tab') {
+    /* Keep keyboard focus inside the modal instead of sending it behind the
+       full-screen viewer. */
+    const focusables = [...lightbox.root.querySelectorAll('button:not([disabled]), a[href]')];
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+    return;
+  }
+  const handled = ['Escape', 'ArrowRight', 'ArrowLeft', '+', '=', '-', '0'].includes(e.key);
+  if (!handled) return;
+  e.preventDefault();
+  e.stopPropagation();
   if (e.key === 'Escape') lightbox.close();
   else if (e.key === 'ArrowRight') lightbox.next();
   else if (e.key === 'ArrowLeft') lightbox.prev();
@@ -388,11 +490,20 @@ class Lightbox {
     this.bmp = null;
     this.full = false;
     this.touched = false;
+    /* Start immersive: the photo fills the viewport instead of appearing
+       as a small "contained" rectangle. The fit button still exposes the
+       whole uncropped photo when that is what the viewer wants. */
+    this.fitMode = 'cover';
     this.s = 1; this.fit = 1; this.tx = 0; this.ty = 0;
     this.vw = 0; this.vh = 0; this.dpr = 1;
     this.pointers = new Map();
     this.pinched = null;
+    this.dragging = null;
+    this.swipe = null;
     this._fullCache = new Map();
+    this._returnFocus = null;
+    this._bodyOverflow = '';
+    this._loadToken = 0;
 
     this._onResize = () => this.resize();
     window.addEventListener('resize', this._onResize);
@@ -481,8 +592,12 @@ class Lightbox {
 
   resize() {
     this.dpr = Math.min(window.devicePixelRatio || 1, 2);
-    this.vw = window.innerWidth;
-    this.vh = window.innerHeight;
+    /* Read the actual canvas box rather than window.innerWidth/Height. This
+       keeps the math correct with mobile browser chrome, safe areas and any
+       future scrollbar/layout changes. */
+    const box = this.canvas.getBoundingClientRect();
+    this.vw = Math.max(1, box.width || window.innerWidth);
+    this.vh = Math.max(1, box.height || window.innerHeight);
     this.canvas.width = Math.ceil(this.vw * this.dpr);
     this.canvas.height = Math.ceil(this.vh * this.dpr);
     if (this.bmp) {
@@ -494,7 +609,8 @@ class Lightbox {
 
   open(slug, i) {
     const entry = state.bySlug.get(slug);
-    if (!entry) return;
+    if (!entry || !entry.photos.length) return;
+    this._rememberFocus();
     this.photos = entry.photos;
     this.isOpen = true;
     this.root.classList.add('open');
@@ -506,6 +622,8 @@ class Lightbox {
 
   /* for standalone pages: open an arbitrary photos array */
   openPhotos(photos, i) {
+    if (!photos || !photos.length) return;
+    this._rememberFocus();
     this.photos = photos;
     this.isOpen = true;
     this.root.classList.add('open');
@@ -515,22 +633,45 @@ class Lightbox {
     this.root.querySelector('#lb-close').focus({ preventScroll: true });
   }
 
+  _rememberFocus() {
+    if (!this.isOpen) {
+      this._returnFocus = document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+      this._bodyOverflow = document.body.style.overflow;
+      this.fitMode = 'cover';
+    }
+  }
+
   close() {
     if (!this.isOpen) return;
     this.isOpen = false;
+    this._loadToken++;
     this.root.classList.remove('open');
-    if (!overlay.classList.contains('open')) document.body.style.overflow = '';
+    /* The lightbox is shared by the homepage overlay and the standalone
+       pages. Do not dereference a missing overlay, and restore the exact
+       scroll lock state that existed before opening. */
+    if (!overlay || !overlay.classList.contains('open')) document.body.style.overflow = this._bodyOverflow;
     this._fullCache.forEach((b) => b && b.close && b.close());
     this._fullCache.clear();
+    this.pointers.clear();
+    this.dragging = null;
+    this.pinched = null;
+    const focus = this._returnFocus;
+    this._returnFocus = null;
+    if (focus && document.contains(focus)) {
+      requestAnimationFrame(() => focus.focus({ preventScroll: true }));
+    }
   }
 
-  prev() { this.show((this.i - 1 + this.photos.length) % this.photos.length); }
-  next() { this.show((this.i + 1) % this.photos.length); }
+  prev() { if (this.photos.length > 1) this.show((this.i - 1 + this.photos.length) % this.photos.length); }
+  next() { if (this.photos.length > 1) this.show((this.i + 1) % this.photos.length); }
 
   show(i) {
     this.i = i;
     const p = this.photos[i];
     if (!p) return;
+    const token = ++this._loadToken;
     this.touched = false;
     this.full = false;
     this.bmp = null;
@@ -550,7 +691,10 @@ class Lightbox {
       .then((url) => new Promise((res) => {
         const im = new Image();
         im.onload = () => {
-          if (this.i !== i) return;
+          if (this.i !== i || this._loadToken !== token) {
+            res();
+            return;
+          }
           this.setBitmap(im, false);
           res();
         };
@@ -559,11 +703,11 @@ class Lightbox {
       }))
       .catch(() => {});
 
-    this.loadFull(p, i);
+    this.loadFull(p, i, token);
     this.preloadNeighbors();
   }
 
-  async loadFull(p, i) {
+  async loadFull(p, i, token = this._loadToken) {
     try {
       let bmp = this._fullCache.get(p.url);
       if (!bmp) {
@@ -596,6 +740,10 @@ class Lightbox {
           setTimeout(() => URL.revokeObjectURL(u), 5000);
           return im;
         })();
+        if (!this.isOpen || token !== this._loadToken) {
+          if (bmp && bmp.close) bmp.close();
+          return;
+        }
         if (this._fullCache.size >= 4) {
           const first = this._fullCache.keys().next().value;
           const old = this._fullCache.get(first);
@@ -604,11 +752,14 @@ class Lightbox {
         }
         this._fullCache.set(p.url, bmp);
       }
-      if (this.i !== i) return;
+      /* Neighbor preloads use -1 intentionally: they warm the cache but
+         must never replace the image currently on screen. */
+      const current = i !== -1 && this.i === i && this._loadToken === token;
+      if (!current) return;
       this.root.querySelector('#lb-load').classList.remove('on');
       this.setBitmap(bmp, true);
     } catch (_) {
-      if (this.i === i) {
+      if (i !== -1 && this.i === i && this._loadToken === token) {
         this.root.querySelector('#lb-load').classList.remove('on');
         if (!this.bmp) this.root.querySelector('#lb-err').classList.add('on');
       }
@@ -631,6 +782,9 @@ class Lightbox {
   }
 
   setBitmap(bmp, isFull) {
+    /* Full resolution may win the race against the thumbnail. Never let the
+       slower thumbnail replace a sharp image that is already on screen. */
+    if (this.full && !isFull) return;
     const hadBmp = !!this.bmp;
     this.bmp = bmp;
     this.full = isFull || this.full;
@@ -639,25 +793,44 @@ class Lightbox {
     }
     this.render();
     this.root.querySelector('#lb-load').classList.remove('on');
+    this.root.querySelector('#lb-err').classList.remove('on');
   }
 
   applyFit(hard) {
     const [iw, ih] = this._size();
-    this.fit = Math.min(this.vw / iw, this.vh / ih);
-    /* never open a photo tiny: the SHORT side is shown at at least
-       65% of the viewport's short side (soft upscale if the source
-       is small — logos, 200x300 seeds, failed full-res loads) */
-    const shortSide = Math.min(iw, ih);
-    if (shortSide) {
-      const targetShort = Math.min(this.vw, this.vh) * 0.65;
-      if (shortSide * this.fit < targetShort) this.fit = targetShort / shortSide;
-    }
+    if (!iw || !ih || !this.vw || !this.vh) return;
+    /* `cover` is the deliberate default for an immersive portfolio viewer:
+       the canvas is genuinely filled edge to edge. `contain` is available
+       from the fit button for a completely uncropped view. */
+    this.fit = this.fitMode === 'cover'
+      ? Math.max(this.vw / iw, this.vh / ih)
+      : Math.min(this.vw / iw, this.vh / ih);
     if (hard || !this.touched) {
       this.s = this.fit;
       this.tx = (this.vw - iw * this.s) / 2;
       this.ty = (this.vh - ih * this.s) / 2;
     }
     this.clampPan();
+    this.syncFitControl();
+  }
+
+  toggleFit() {
+    if (!this.bmp) return;
+    this.fitMode = this.fitMode === 'cover' ? 'contain' : 'cover';
+    this.touched = false;
+    this.applyFit(true);
+    this.render();
+    this.root.querySelector('#lb-zoom').textContent = '100%';
+  }
+
+  syncFitControl() {
+    const btn = this.root.querySelector('#lb-fit');
+    if (!btn) return;
+    const showingWhole = this.fitMode === 'contain';
+    const label = t(showingWhole ? 'lb.fill' : 'lb.fit');
+    btn.setAttribute('aria-label', label);
+    btn.setAttribute('title', label);
+    btn.classList.toggle('is-contain', showingWhole);
   }
 
   clampPan() {

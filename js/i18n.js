@@ -68,6 +68,10 @@ const DICT = {
     'lb.prev': 'Предыдущее',
     'lb.next': 'Следующее',
     'lb.download': 'Скачать оригинал',
+    'lb.zoomOut': 'Уменьшить',
+    'lb.zoomIn': 'Увеличить',
+    'lb.fit': 'Показать фото целиком',
+    'lb.fill': 'Заполнить экран',
     'lb.hint': 'колесо — зум · драг — перемещение',
     'lb.error': 'Не удалось загрузить фото',
 
@@ -546,6 +550,10 @@ const DICT = {
     'lb.prev': 'Previous',
     'lb.next': 'Next',
     'lb.download': 'Download original',
+    'lb.zoomOut': 'Zoom out',
+    'lb.zoomIn': 'Zoom in',
+    'lb.fit': 'Show the whole photo',
+    'lb.fill': 'Fill the screen',
     'lb.hint': 'wheel — zoom · drag — pan',
     'lb.error': 'Could not load the photo',
 

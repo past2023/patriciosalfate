@@ -508,10 +508,10 @@ body.ready #hero-title .line-in{ transform: none }
    row spans are set by JS from each photo's real ratio */
 .masonry{
   display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 14px; grid-auto-rows: 10px;
+  gap: 14px; grid-auto-rows: 10px; grid-auto-flow: dense;
 }
 .m-item{
-  position: relative; grid-row-end: span 42; min-height: 200px;
+  position: relative; grid-row-end: span 20; min-height: 200px;
   border-radius: 12px; overflow: hidden; background: var(--surface); cursor: zoom-in;
 }
 .m-item .skel, .m-item img{
@@ -541,48 +541,67 @@ body.ready #hero-title .line-in{ transform: none }
 
 /* ---------- lightbox ---------- */
 #lb{
-  position: fixed; inset: 0; z-index: 115;
-  background: var(--lb-bg);
+  position: fixed; inset: 0; z-index: 115; overflow: hidden; isolation: isolate;
+  background:
+    radial-gradient(75% 65% at 50% 45%, rgba(255,46,166,.08), transparent 68%),
+    var(--lb-bg);
   opacity: 0; visibility: hidden; transition: opacity .4s var(--ease), visibility 0s .4s;
   touch-action: none;
 }
 #lb.open{ opacity: 1; visibility: visible; transition: opacity .4s var(--ease) }
-#lb-canvas{ position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab }
+#lb::after{
+  content: ""; position: absolute; z-index: 2; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(7,7,9,.38), transparent 20%, transparent 78%, rgba(7,7,9,.52));
+}
+#lb-canvas{ position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; cursor: grab; touch-action: none }
 #lb-canvas.grabbing{ cursor: grabbing }
 .lb-top{
   position: absolute; z-index: 5; top: 0; left: 0; right: 0;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 26px; pointer-events: none;
+  display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  padding: max(20px, env(safe-area-inset-top)) max(26px, env(safe-area-inset-right)) 20px max(26px, env(safe-area-inset-left));
+  pointer-events: none;
 }
 .lb-top > *{ pointer-events: auto }
-.lb-count{ font-family: var(--font-m); font-size: 12px; letter-spacing: .2em; color: var(--text) }
+.lb-count{
+  padding: 10px 14px; border: 1px solid rgba(240,236,228,.2); border-radius: 999px;
+  background: rgba(10,10,12,.42); backdrop-filter: blur(12px);
+  font-family: var(--font-m); font-size: 12px; letter-spacing: .2em; color: var(--text);
+}
 .lb-count b{ color: var(--accent); font-weight: 500 }
 .lb-arrow{
   position: absolute; z-index: 5; top: 50%; transform: translateY(-50%);
   width: 58px; height: 58px; border-radius: 50%;
-  border: 1px solid var(--line2); background: rgba(10,10,12,.45); backdrop-filter: blur(8px);
+  border: 1px solid rgba(240,236,228,.28); background: rgba(10,10,12,.42); backdrop-filter: blur(10px);
   display: grid; place-items: center; font-size: 22px;
-  transition: background .3s, border-color .3s, color .3s, opacity .3s;
+  transition: background .3s, border-color .3s, color .3s, opacity .3s, transform .3s var(--ease);
 }
-.lb-arrow:hover{ background: var(--accent); border-color: var(--accent); color: var(--accent-ink) }
-.lb-prev{ left: 22px } .lb-next{ right: 22px }
-@media (max-width: 720px){
-  .lb-arrow{ width: 46px; height: 46px; font-size: 18px; top: auto; bottom: 86px; transform: none }
-  .lb-prev{ left: 14px } .lb-next{ right: 14px }
-}
+.lb-arrow:hover{ background: var(--accent); border-color: var(--accent); color: var(--accent-ink); transform: translateY(-50%) scale(1.06) }
+.lb-prev{ left: max(22px, env(safe-area-inset-left)) } .lb-next{ right: max(22px, env(safe-area-inset-right)) }
 .lb-bottom{
   position: absolute; z-index: 5; left: 0; right: 0; bottom: 0;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 20px 26px; pointer-events: none;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 22px;
+  padding: 20px max(26px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(26px, env(safe-area-inset-left));
+  pointer-events: none;
 }
 .lb-bottom > *{ pointer-events: auto }
-.lb-name{ font-family: var(--font-m); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60vw }
-.lb-ctrl{ display: flex; align-items: center; gap: 10px }
-.lb-zoom{ font-family: var(--font-m); font-size: 11px; letter-spacing: .12em; color: var(--muted); min-width: 48px; text-align: right }
+.lb-caption{ min-width: 0; display: flex; flex-direction: column; gap: 7px }
+.lb-name{ font-family: var(--font-m); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: min(42vw, 520px) }
+.lb-hint{ font-family: var(--font-m); font-size: 10px; letter-spacing: .08em; color: var(--muted); opacity: .85 }
+.lb-ctrl{
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  padding: 6px; border: 1px solid rgba(240,236,228,.18); border-radius: 999px;
+  background: rgba(10,10,12,.46); backdrop-filter: blur(12px);
+}
+.lb-ctrl .icon-btn{ width: 38px; height: 38px; border-color: transparent }
+.lb-ctrl .icon-btn:hover{ border-color: var(--accent) }
+.lb-ctrl .icon-btn svg{ width: 16px; height: 16px }
+.lb-fit .fit-icon{ transition: transform .4s var(--ease) }
+.lb-fit.is-contain .fit-icon{ transform: rotate(180deg) }
+.lb-zoom{ font-family: var(--font-m); font-size: 11px; letter-spacing: .12em; color: var(--text); min-width: 48px; text-align: center }
 .lb-load{
   position: absolute; z-index: 4; top: 50%; left: 50%;
   width: 44px; height: 44px; margin: -22px;
-  border-radius: 50%; border: 2px solid var(--line2); border-top-color: var(--accent);
+  border-radius: 50%; border: 2px solid rgba(240,236,228,.25); border-top-color: var(--accent);
   animation: spin .9s linear infinite;
   opacity: 0; transition: opacity .3s; pointer-events: none;
 }
@@ -594,6 +613,28 @@ body.ready #hero-title .line-in{ transform: none }
   font-family: var(--font-m); font-size: 12px; letter-spacing: .08em;
 }
 .lb-err.on{ display: flex }
+@media (max-width: 720px){
+  .lb-arrow{ width: 46px; height: 46px; font-size: 18px; top: auto; bottom: calc(92px + env(safe-area-inset-bottom)); transform: none }
+  .lb-arrow:hover{ transform: scale(1.06) }
+  .lb-prev{ left: max(14px, env(safe-area-inset-left)) } .lb-next{ right: max(14px, env(safe-area-inset-right)) }
+  .lb-bottom{ align-items: center; gap: 10px; padding-top: 14px }
+  .lb-name{ max-width: 34vw }
+  .lb-hint{ display: none }
+  .lb-ctrl{ gap: 2px; padding: 4px }
+  .lb-ctrl .icon-btn{ width: 34px; height: 34px }
+  .lb-zoom{ min-width: 42px; font-size: 10px }
+}
+@media (max-width: 430px){
+  .lb-caption{ display: none }
+  .lb-bottom{ justify-content: flex-end }
+}
+html.light #lb::after{ background: linear-gradient(180deg, rgba(250,248,243,.5), transparent 20%, transparent 78%, rgba(250,248,243,.62)) }
+html.light .lb-count,
+html.light .lb-ctrl,
+html.light .lb-arrow{ background: rgba(250,248,243,.62); border-color: rgba(24,18,12,.2) }
+@media (prefers-reduced-motion: reduce){
+  #ov, #lb, #lb-canvas, .lb-arrow, .lb-fit .fit-icon{ transition: none !important }
+}
 
 /* ---------- services ---------- */
 .sv-list{ border-bottom: 1px solid var(--line) }
@@ -890,10 +931,10 @@ html.light{ --p-sub: #4a4238 }
    no column gaps, every cell filled edge to edge */
 .pmasonry{
   display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 14px; grid-auto-rows: 10px;
+  gap: 14px; grid-auto-rows: 10px; grid-auto-flow: dense;
 }
 .pmasonry figure{
-  position: relative; grid-row-end: span 42;
+  position: relative; grid-row-end: span 20;
   border-radius: 12px; overflow: hidden; cursor: zoom-in;
   background: var(--skel-a); min-height: 220px;
 }
