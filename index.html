@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Патрисио Сальфате — фотограф и дизайнер, Санкт-Петербург</title>
+  <meta name="description" content="Фотограф и дизайнер в Санкт-Петербурге. Портрет, интерьер, фэшн, брендинг, сайты. 17+ лет опыта, работа по России и за рубежом.">
+  <meta property="og:title" content="Патрисио Сальфате — фотограф и дизайнер">
+  <meta property="og:description" content="Портрет, интерьер, фэшн, брендинг, сайты. Санкт-Петербург · выезд · удалённо.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://patriciosalfate.ru/">
+  <meta name="theme-color" content="#0a0a0c">
+  <script>try{if(localStorage.getItem('ps.theme')==='light')document.documentElement.classList.add('light')}catch(e){}</script>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@1,500;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&family=Unbounded:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Person","name":"Patricio Salfate","jobTitle":"Photographer & Designer","telephone":"+79643772778","url":"https://patriciosalfate.ru","address":{"@type":"PostalAddress","addressLocality":"Saint Petersburg","addressCountry":"RU"}}
+  </script>
+</head>
+<body>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#work" data-i18n="a11y.skip">К содержанию</a>
+
+  <!-- preloader -->
+  <div id="pre" aria-hidden="true">
+    <div class="pre-top">
+      <span class="pre-word">P<i>.</i>S</span>
+      <span class="mono">© 2026</span>
+    </div>
+    <div style="text-align:right">
+      <div class="pre-num" id="pre-num">000</div>
+      <div class="pre-line" id="pre-line"><b></b></div>
+      <div class="mono pre-label" style="text-align:right" data-i18n="pre.label">Портфолио — Санкт-Петербург</div>
+    </div>
+  </div>
+
+  <!-- custom cursor / progress -->
+  <div id="cur-dot" aria-hidden="true"></div>
+  <div id="cur-ring" aria-hidden="true"><span></span></div>
+  <div id="progress" aria-hidden="true"></div>
+
+  <!-- header -->
+  <header id="site-header">
+    <div class="container head-in">
+      <a class="logo" href="#top" aria-label="Patricio Salfate — home">
+        <img id="logo-img" src="/photos/logoamor01.jpg" alt="Patricio Salfate">
+        <span class="logo-fallback">PS<i></i></span>
+      </a>
+      <nav class="nav" aria-label="Основная навигация">
+        <a href="#work" data-i18n="nav.work">Работы</a>
+        <a href="#services" data-i18n="nav.services">Услуги</a>
+        <a href="#about" data-i18n="nav.about">Обо мне</a>
+        <a href="#contact" data-i18n="nav.contact">Контакты</a>
+        <span class="nav-pages">
+          <span class="nav-sep" aria-hidden="true"></span>
+          <a href="/фотодень/" data-i18n="nav.photoDay">ФотоДень</a>
+          <a href="/интерьерная_фотосъемка/" data-i18n="nav.interior">Интерьер</a>
+          <a href="/веб-дизайн/" data-i18n="nav.webdesign">Веб-дизайн</a>
+          <a href="/cv/" data-i18n="nav.cv">CV</a>
+          <a href="/music/" data-i18n="nav.music">Музыка</a>
+        </span>
+      </nav>
+      <div class="head-right">
+        <button type="button" class="theme-btn" id="theme-btn" data-i18n-title="theme.dark" aria-label="Тема">
+          <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2 12h2.5M19.5 12H22M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+        </button>
+        <div class="lang" role="group" aria-label="Язык / Language">
+          <button type="button" data-lang="ru" class="act">RU</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
+        <button class="burger" id="burger" type="button" aria-expanded="false" aria-label="Меню"><i></i><i></i><i></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- fullscreen menu -->
+  <div id="menu">
+    <nav class="menu-nav" aria-label="Меню">
+      <a href="/"><span class="idx">⌂</span><span data-i18n="nav.home">Главная</span></a>
+      <a href="#work"><span class="idx">01</span><span data-i18n="nav.work">Работы</span></a>
+      <a href="#services"><span class="idx">02</span><span data-i18n="nav.services">Услуги</span></a>
+      <a href="#about"><span class="idx">03</span><span data-i18n="nav.about">Обо мне</span></a>
+      <a href="#contact"><span class="idx">04</span><span data-i18n="nav.contact">Контакты</span></a>
+      <div class="menu-pages mono"><span data-i18n="nav.pagesGroup">Страницы</span></div>
+      <a href="/фотодень/"><span class="idx">→</span><span data-i18n="nav.photoDay">ФотоДень</span></a>
+      <a href="/интерьерная_фотосъемка/"><span class="idx">→</span><span data-i18n="nav.interiorFull">Интерьерная съёмка</span></a>
+      <a href="/веб-дизайн/"><span class="idx">→</span><span data-i18n="nav.webdesign">Веб-дизайн</span></a>
+      <a href="/cv/"><span class="idx">→</span><span data-i18n="nav.cv">CV</a>
+      <a href="/music/"><span class="idx">→</span><span data-i18n="nav.music">Музыка</span></a>
+    </nav>
+    <div class="menu-foot">
+      <a href="tel:+79643772778">+7 964 377 2778</a>
+      <a href="https://t.me/patriciosalfate" target="_blank" rel="noopener">@patriciosalfate</a>
+      <a href="https://vk.com/patriciosalfate" target="_blank" rel="noopener">vk.com/patriciosalfate</a>
+      <a href="https://wa.me/79643772778" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+
+  <main id="top">
+    <!-- ================= HERO ================= -->
+    <section id="hero">
+      <canvas id="hero-aurora" class="hero-aurora" aria-hidden="true"></canvas>
+      <div class="hero-slides" aria-hidden="true">
+        <img id="hero-slide-a" alt="">
+        <img id="hero-slide-b" alt="">
+      </div>
+      <div class="laser" aria-hidden="true"></div>
+      <div class="hero-scrim" aria-hidden="true"></div>
+      <div class="container hero-content">
+        <div class="hero-kicker mono"><span class="dot" aria-hidden="true"></span><span data-i18n="hero.kicker">Санкт-Петербург — выезд и удалённо</span></div>
+        <h1 id="hero-title" data-i18n-aria="a11y.hero" aria-label="Патрисио Сальфате">
+          <span class="line" id="hero-line-top"><span class="line-in">ПАТРИСИО</span></span>
+          <span class="line l2" id="hero-line-bot"><span class="line-in">САЛЬФАТЕ</span></span>
+        </h1>
+        <p class="hero-sub" data-i18n-html="hero.sub">Фотограф · Видеограф · Дизайнер — <b>портрет, интерьер, брендинг</b></p>
+        <div class="hero-bottom">
+          <div class="hero-meta">
+            <div class="hm"><b data-i18n="hero.m1.t">17+</b><span data-i18n="hero.m1.s">лет опыта</span></div>
+            <div class="hm"><b data-i18n="hero.m2.t">Гео</b><span data-i18n="hero.m2.s">Россия и зарубежье</span></div>
+            <div class="hm"><b data-i18n="hero.m3.t">Под ключ</b><span data-i18n="hero.m3.s">от идеи до результата</span></div>
+            <div class="hm"><b data-i18n="hero.m4.t">Сроки</b><span data-i18n="hero.m4.s">быстро и аккуратно</span></div>
+          </div>
+          <div class="scroll-cue"><span class="track" aria-hidden="true"><i></i></span><span class="mono" data-i18n="hero.scroll">листайте</span></div>
+        </div>
+      </div>
+      <div class="hero-geo" id="hero-geo" aria-hidden="true"></div>
+    </section>
+
+    <!-- marquee -->
+    <div class="marquee" id="marquee-main" aria-hidden="true"></div>
+
+    <!-- ================= WORK ================= -->
+    <section id="work" class="sec">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div>
+            <span class="idx" data-i18n="work.idx">01 — Портфолио</span>
+            <h2 class="sec-title" data-i18n="work.title">Работы</h2>
+          </div>
+        </div>
+        <div class="ggrid" id="ggrid"></div>
+      </div>
+    </section>
+
+    <!-- ================= SERVICES ================= -->
+    <section id="services" class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div>
+            <span class="idx" data-i18n="sv.idx">02 — Услуги</span>
+            <h2 class="sec-title" data-i18n="sv.title">Спектр услуг</h2>
+          </div>
+          <p class="sec-hint" data-i18n="sv.hint">Собираем решение под задачу: съёмка, брендинг, сайты и печать</p>
+        </div>
+        <div class="sv-list" id="sv-list"></div>
+      </div>
+    </section>
+    <!-- ================= SHOWREEL ================= -->
+    <section id="showreel" class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div>
+            <span class="idx" data-i18n="video.idx">03 — Видео</span>
+            <h2 class="sec-title" data-i18n="video.title">Шоурил</h2>
+          </div>
+        </div>
+        <div class="vgrid" id="vgrid"></div>
+      </div>
+    </section>
+
+    <!-- ================= ABOUT ================= -->
+    <section id="about" class="sec" style="padding-top:0">
+      <div class="container about-grid">
+        <figure class="about-media" data-reveal>
+          <div class="frame" id="about-frame" data-parallax="0.05">
+            <span class="skel"></span>
+            <div class="about-fallback"><span class="ps">PS</span><span class="mono">photos/about/</span></div>
+          </div>
+          <figcaption class="mono"><span data-i18n="nav.about">Обо мне</span><span>SPB</span></figcaption>
+        </figure>
+        <div class="about-txt" data-reveal>
+          <span class="kicker" data-i18n="about.idx">04 — Обо мне</span>
+          <h2 data-i18n-html="about.title">17 лет — <i class="it">фотография, дизайн</i> и кинематография</h2>
+          <p data-i18n-html="about.p1"><b>Патрисио Сальфате Т.</b> — главный специалист с 17-летним опытом в дизайне и фотографии, кинематографии, разработке и дизайне сайтов. А ещё — музыкальный продюсер и композитор.</p>
+          <div class="about-roles">
+            <span data-i18n="about.roles.1">Дизайн и фотография</span>
+            <span data-i18n="about.roles.2">Кинематография</span>
+            <span data-i18n="about.roles.3">Разработка и дизайн сайтов</span>
+            <span data-i18n="about.roles.4">Музыкальный продюсер и композитор</span>
+          </div>
+          <p data-i18n-html="about.p2">Работаю с частными клиентами и брендами в России и за рубежом: съёмка на выезде или удалённо — под ключ, от первой идеи до готового результата.</p>
+          <div class="manager">
+            <img class="avatar" id="manager-avatar" src="/photos/1650143188616_elena-1024x1024.jpg" alt="Елена Хухарева">
+            <span class="mono role" data-i18n="about.managerRole">Персональный менеджер</span>
+            <span class="name" data-i18n="about.managerName">Елена Хухарева</span>
+            <p data-i18n="about.managerText">Привет! Меня зовут Елена — я буду вашим персональным менеджером от первого обсуждения задачи до сдачи готовой работы.</p>
+          </div>
+          <div class="stats">
+            <div class="stat"><b data-i18n="about.stat1">17+ лет опыта</b></div>
+            <div class="stat"><b data-i18n="about.stat2">Россия и зарубежье</b></div>
+            <div class="stat"><b data-i18n="about.stat3">Выезд · Удалённо</b></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PROCESS ================= -->
+    <section id="process" class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div>
+            <span class="idx" data-i18n="process.idx">05 — Процесс</span>
+            <h2 class="sec-title" data-i18n="process.title">Как мы работаем</h2>
+          </div>
+          <p class="sec-hint" data-i18n="process.hint">Коротко и по делу</p>
+        </div>
+        <div class="pgrid" id="pgrid"></div>
+      </div>
+    </section>
+
+    <!-- ================= CLIENTS ================= -->
+    <section id="clients" class="sec" style="padding-top:0">
+      <div class="container">
+        <p class="mono clients-label" data-i18n="clients.title">Наши клиенты</p>
+        <p class="clients-sub" data-i18n="clients.sub">Мы ценим каждого партнёра, независимо от размера его возможностей</p>
+      </div>
+      <div class="marquee marquee--clients" id="marquee-clients" aria-hidden="true"></div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section id="contact" class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="contact-top">
+          <div data-reveal>
+            <span class="idx" style="display:block;margin-bottom:18px" data-i18n="contact.idx">05 — Контакты</span>
+            <h2>
+              <span class="l"><span class="l-in" data-i18n="contact.title1">Сделаем</span></span>
+              <span class="l"><i data-i18n="contact.title2">вместе</i></span>
+            </h2>
+          </div>
+          <div data-reveal>
+            <p class="contact-sub" data-i18n="contact.sub">Мы на связи и отвечаем быстро. Выберите удобный канал — или напишите напрямую.</p>
+            <div class="contact-cta">
+              <a class="btn btn--primary magnetic" href="https://max.ru/u/f9LHodD0cOLoePG0Rmk1zH5-Sx1EwiOp3Um5KLAWZi0ST6kvktuLWyzizs4" target="_blank" rel="noopener">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span data-i18n="contact.cta.max">Написать в MAX</span> <span class="arr">↗</span>
+              </a>
+              <a class="btn magnetic" href="https://t.me/patriciosalfate" target="_blank" rel="noopener">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
+                <span data-i18n="contact.cta.tg">Написать в Telegram</span> <span class="arr">↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="ch-grid" id="ch-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="container">
+      <div class="foot-word" aria-hidden="true">SALFATE</div>
+      <div class="foot-grid">
+        <a href="#work" data-i18n="nav.work">Работы</a>
+        <a href="#services" data-i18n="nav.services">Услуги</a>
+        <a href="#about" data-i18n="nav.about">Обо мне</a>
+        <a href="#contact" data-i18n="nav.contact">Контакты</a>
+      </div>
+      <div class="foot-legal">
+        <span>© <span id="year">2026</span> Patricio Salfate · <span data-i18n="foot.rights">Все права защищены</span></span>
+        <a href="#top" data-i18n="foot.top">Наверх ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <noscript>
+    <style>
+      #pre, #cur-dot, #cur-ring, .skel { display:none !important }
+      [data-reveal] { opacity:1 !important; transform:none !important }
+      #ggrid { display:none }
+    </style>
+    <div class="nojs">Для просмотра портфолио включите JavaScript / Please enable JavaScript to view the portfolio.</div>
+  </noscript>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
