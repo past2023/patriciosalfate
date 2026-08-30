@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title data-i18n="pg.mu.meta.title">Музыка — Patricio Salfate</title>
+  <meta name="description" data-i18n="pg.mu.meta.desc" content="Patricio Salfate — продюсер и композитор. Retro-futurism electro-dream: new wave, dream pop, кинематографичные синтезаторы.">
+  <meta name="theme-color" content="#0a0a0c">
+  <script>try{if(localStorage.getItem('ps.theme')==='light')document.documentElement.classList.add('light')}catch(e){}</script>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@1,500;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&family=Unbounded:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#main" data-i18n="a11y.skip">К содержанию</a>
+
+  <div id="pre" aria-hidden="true">
+    <div class="pre-top">
+      <span class="pre-word">P<i>.</i>S</span>
+      <span class="mono">© 2026</span>
+    </div>
+    <div style="text-align:right">
+      <div class="pre-num" id="pre-num">000</div>
+      <div class="pre-line" id="pre-line"><b></b></div>
+      <div class="mono pre-label" style="text-align:right" data-i18n="pre.label">Портфолио — Санкт-Петербург</div>
+    </div>
+  </div>
+
+  <div id="cur-dot" aria-hidden="true"></div>
+  <div id="cur-ring" aria-hidden="true"><span></span></div>
+  <div id="progress" aria-hidden="true"></div>
+
+  <header id="site-header">
+    <div class="container head-in">
+      <a class="logo" href="/" aria-label="Patricio Salfate — home">
+        <img id="logo-img" src="/photos/logoamor01.jpg" alt="Patricio Salfate">
+        <span class="logo-fallback">PS<i></i></span>
+      </a>
+      <nav class="nav" aria-label="Основная навигация">
+        <a href="/#work" data-i18n="nav.work">Работы</a>
+        <a href="/#services" data-i18n="nav.services">Услуги</a>
+        <a href="/#about" data-i18n="nav.about">Обо мне</a>
+        <a href="/#contact" data-i18n="nav.contact">Контакты</a>
+        <span class="nav-pages">
+          <span class="nav-sep" aria-hidden="true"></span>
+          <a href="/фотодень/" data-i18n="nav.photoDay">ФотоДень</a>
+          <a href="/интерьерная_фотосъемка/" data-i18n="nav.interior">Интерьер</a>
+          <a href="/веб-дизайн/" data-i18n="nav.webdesign">Веб-дизайн</a>
+          <a href="/cv/" data-i18n="nav.cv">CV</a>
+          <a href="/music/" data-i18n="nav.music">Музыка</a>
+        </span>
+      </nav>
+      <div class="head-right">
+        <button type="button" class="theme-btn" id="theme-btn" data-i18n-title="theme.dark" aria-label="Тема">
+          <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2 12h2.5M19.5 12H22M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+        </button>
+        <div class="lang" role="group" aria-label="Язык / Language">
+          <button type="button" data-lang="ru" class="act">RU</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
+        <button class="burger" id="burger" type="button" aria-expanded="false" aria-label="Меню"><i></i><i></i><i></i></button>
+      </div>
+    </div>
+  </header>
+
+  <div id="menu">
+    <nav class="menu-nav" aria-label="Меню">
+      <a href="/"><span class="idx">⌂</span><span data-i18n="nav.home">Главная</span></a>
+      <a href="/#work"><span class="idx">01</span><span data-i18n="nav.work">Работы</span></a>
+      <a href="/#services"><span class="idx">02</span><span data-i18n="nav.services">Услуги</span></a>
+      <a href="/#about"><span class="idx">03</span><span data-i18n="nav.about">Обо мне</span></a>
+      <a href="/#contact"><span class="idx">04</span><span data-i18n="nav.contact">Контакты</span></a>
+      <div class="menu-pages mono"><span data-i18n="nav.pagesGroup">Страницы</span></div>
+      <a href="/фотодень/"><span class="idx">→</span><span data-i18n="nav.photoDay">ФотоДень</span></a>
+      <a href="/интерьерная_фотосъемка/"><span class="idx">→</span><span data-i18n="nav.interiorFull">Интерьерная съёмка</span></a>
+      <a href="/веб-дизайн/"><span class="idx">→</span><span data-i18n="nav.webdesign">Веб-дизайн</span></a>
+      <a href="/cv/"><span class="idx">→</span><span data-i18n="nav.cv">CV</span></a>
+      <a href="/music/"><span class="idx">→</span><span data-i18n="nav.music">Музыка</span></a>
+    </nav>
+    <div class="menu-foot">
+      <a href="tel:+79643772778">+7 964 377 2778</a>
+      <a href="https://t.me/patriciosalfate" target="_blank" rel="noopener">@patriciosalfate</a>
+      <a href="https://vk.com/patriciosalfate" target="_blank" rel="noopener">vk.com/patriciosalfate</a>
+      <a href="https://wa.me/79643772778" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- ================= HERO ================= -->
+    <section class="p-hero p-hero--grad">
+      <div class="p-hero-scrim" aria-hidden="true"></div>
+      <div class="laser" aria-hidden="true"></div>
+      <div class="container p-hero-in">
+        <p class="mono p-kicker"><span class="dot" aria-hidden="true"></span><span data-i18n="pg.mu.kicker">Искусство — музыка</span></p>
+        <h1 class="p-title" data-i18n="pg.mu.h1">Музыка</h1>
+        <p class="p-sub" data-i18n="pg.mu.sub">Retro-futurism electro-dream — new wave, кинематографичный dream pop, синтезированные текстуры и коллаборации с вокалистами.</p>
+        <div class="chips">
+          <span data-i18n="pg.mu.chips.1">New wave &amp; dream pop</span>
+          <span data-i18n="pg.mu.chips.2">Кинематографичные синт-текстуры</span>
+          <span data-i18n="pg.mu.chips.3">Коллаборации с вокалистами</span>
+          <span data-i18n="pg.mu.chips.4">Электронная музыка с 2000</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ABOUT THE ARTIST ================= -->
+    <section class="sec">
+      <div class="container">
+        <p data-reveal style="max-width:72ch;color:var(--text);font-size:clamp(1.05rem,2vw,1.3rem);line-height:1.6;font-family:var(--font-i);font-style:italic;font-weight:500" data-i18n="pg.mu.p1">Patricio Salfate — продюсер и композитор. Родился в Чили, живёт в Санкт-Петербурге. Его музыка соединяет энергию new wave и кинематографичный dream pop с утончёнными голосами российских певиц.</p>
+      </div>
+    </section>
+
+    <!-- ================= LISTEN ON ================= -->
+    <section class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div><h2 class="sec-title" data-i18n="pg.mu.listen">Слушать на</h2></div>
+        </div>
+        <div class="mp-grid" id="mp-grid">
+          <a class="ch" data-reveal data-mp="spotify" href="https://open.spotify.com/artist/023LfkgyT1rSQkeq5NYjEv" target="_blank" rel="noopener">
+            <span class="ic"></span><span class="lbl">Spotify</span><span class="val">open.spotify.com</span>
+          </a>
+          <a class="ch" data-reveal data-mp="apple" href="https://music.apple.com/us/artist/patricio-salfate/1140473447" target="_blank" rel="noopener">
+            <span class="ic"></span><span class="lbl">Apple Music</span><span class="val">music.apple.com</span>
+          </a>
+          <a class="ch" data-reveal data-mp="vk" href="https://vk.com/artist/patriciosalfate" target="_blank" rel="noopener">
+            <span class="ic"></span><span class="lbl">VK Music</span><span class="val">vk.com/artist</span>
+          </a>
+          <a class="ch" data-reveal data-mp="yandex" href="https://music.yandex.ru/search?text=Patricio%20Salfate" target="_blank" rel="noopener">
+            <span class="ic"></span><span class="lbl">Яндекс Музыка</span><span class="val">music.yandex.ru</span>
+          </a>
+          <a class="ch" data-reveal data-mp="deezer" href="https://www.deezer.com/artist/10810608" target="_blank" rel="noopener">
+            <span class="ic"></span><span class="lbl">Deezer</span><span class="val">deezer.com</span>
+          </a>
+          <a class="ch" data-reveal data-mp="bandcamp" href="https://patriciosalfate.bandcamp.com" target="_blank" rel="noopener">
+            <span class="ic"></span><span class="lbl">Bandcamp</span><span class="val">patriciosalfate.bandcamp.com</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="foot-word" aria-hidden="true">SALFATE</div>
+      <div class="foot-grid">
+        <a href="/#work" data-i18n="nav.work">Работы</a>
+        <a href="/#services" data-i18n="nav.services">Услуги</a>
+        <a href="/#about" data-i18n="nav.about">Обо мне</a>
+        <a href="/#contact" data-i18n="nav.contact">Контакты</a>
+      </div>
+      <div class="foot-legal">
+        <span>© <span id="year">2026</span> Patricio Salfate · <span data-i18n="foot.rights">Все права защищены</span></span>
+        <a href="/" data-i18n="foot.top">Наверх ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <noscript>
+    <style>#pre, #cur-dot, #cur-ring, .skel { display:none !important }</style>
+    <div style="padding:120px 24px;text-align:center;color:#8f8c96">Этот сайт требует JavaScript / This site requires JavaScript.</div>
+  </noscript>
+
+  <script type="module" src="/js/pages.js"></script>
+</body>
+</html>

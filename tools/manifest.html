@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Генератор manifest.json — патч для хостингов без листинга</title>
+  <meta name="robots" content="noindex">
+  <style>
+    :root{ --bg:#0a0a0c; --text:#f0ece4; --muted:#8f8c96; --accent:#ff2ea6; --line:rgba(240,236,228,.14); --surface:#14141a }
+    *{ box-sizing:border-box; margin:0; padding:0 }
+    body{ background:var(--bg); color:var(--text); font-family:system-ui, sans-serif; min-height:100svh; display:flex; align-items:center; justify-content:center; padding:24px }
+    .card{ width:min(680px, 100%); background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:34px; display:flex; flex-direction:column; gap:20px }
+    h1{ font-size:22px } h1 i{ color:var(--accent); font-style:normal }
+    p{ color:var(--muted); font-size:14.5px; line-height:1.6 }
+    code{ font-family:ui-monospace, monospace; font-size:12.5px; color:var(--accent); background:rgba(226,166,77,.12); padding:2px 7px; border-radius:6px }
+    .drop{
+      border:1.5px dashed var(--line); border-radius:14px; padding:44px 20px; text-align:center;
+      cursor:pointer; transition:border-color .3s, background .3s;
+    }
+    .drop:hover, .drop.over{ border-color:var(--accent); background:rgba(226,166,77,.05) }
+    .drop b{ display:block; font-size:16px; margin-bottom:6px }
+    .drop span{ color:var(--muted); font-size:13px }
+    input[type=file]{ display:none }
+    .row{ display:flex; gap:12px; flex-wrap:wrap }
+    button{
+      font:inherit; font-size:13px; letter-spacing:.06em; text-transform:uppercase;
+      padding:13px 22px; border-radius:999px; cursor:pointer;
+      border:1px solid var(--line); color:var(--text); background:transparent;
+      transition:background .25s, color .25s, border-color .25s;
+    }
+    button:hover{ background:var(--accent); color:var(--bg); border-color:var(--accent) }
+    button:disabled{ opacity:.4; pointer-events:none }
+    pre{
+      background:#060608; border:1px solid var(--line); border-radius:12px;
+      padding:16px; font-family:ui-monospace, monospace; font-size:12px;
+      max-height:260px; overflow:auto; white-space:pre-wrap; word-break:break-all; color:#cfcdd4;
+      display:none;
+    }
+    pre.on{ display:block }
+    .stat{ font-family:ui-monospace, monospace; font-size:12px; color:var(--accent); min-height:16px }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>manifest.json <i>·</i> для хостингов без листинга каталогов</h1>
+    <p>
+      Основной способ обновления сайта — просто загрузить фото в папку на хостинге
+      (Apache / Nginx с листингом). Если ваш хостинг не умеет листать каталоги
+      (GitHub Pages, Netlify и т.п.), сгенерируйте <code>manifest.json</code> здесь
+      и загрузите его в папку галереи рядом с фото.
+    </p>
+    <label class="drop" id="drop">
+      <b>Выберите папку с фото</b>
+      <span>или перетащите её сюда — файлы не загружаются в интернет, всё происходит в браузере</span>
+      <input type="file" id="files" webkitdirectory directory multiple>
+    </label>
+    <div class="stat" id="stat"></div>
+    <div class="row">
+      <button id="gen" disabled>Сгенерировать JSON</button>
+      <button id="copy" disabled>Скопировать</button>
+      <button id="dl" disabled>Скачать manifest.json</button>
+    </div>
+    <pre id="out"></pre>
+    <p style="font-size:12.5px">Результат загрузите, например, в <code>photos/photo/manifest.json</code>. Даты берутся из имён/меток файлов — сортировка сохранится.</p>
+  </div>
+  <script>
+    const IMG = /\.(jpe?g|png|webp|gif|avif|bmp)$/i;
+    const files = [];
+    const $ = (s) => document.querySelector(s);
+    const drop = $('#drop'), input = $('#files'), stat = $('#stat');
+    const gen = $('#gen'), copy = $('#copy'), dl = $('#dl'), out = $('#out');
+
+    function addList(list, prefix) {
+      for (const f of list) {
+        const rel = (prefix ? prefix + '/' : '') + f.name;
+        if (f.isDirectory || !IMG.test(f.name)) continue;
+        files.push({ path: rel, date: new Date(f.lastModified).toISOString() });
+      }
+    }
+
+    input.addEventListener('change', () => {
+      files.length = 0;
+      const list = Array.from(input.files || []);
+      for (const f of list) {
+        const rel = f.webkitRelativePath || f.name;
+        if (IMG.test(f.name)) files.push({ path: rel, date: new Date(f.lastModified).toISOString() });
+      }
+      refresh();
+    });
+
+    ['dragover', 'dragenter'].forEach((ev) => drop.addEventListener(ev, (e) => {
+      e.preventDefault(); drop.classList.add('over');
+    }));
+    ['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, (e) => {
+      e.preventDefault(); drop.classList.remove('over');
+    }));
+    drop.addEventListener('drop', (e) => {
+      const items = e.dataTransfer && e.dataTransfer.items;
+      if (items && items.length && items[0].webkitGetAsEntry) {
+        files.length = 0;
+        walk(items[0].webkitGetAsEntry());
+      } else {
+        files.length = 0;
+        for (const f of e.dataTransfer.files) if (IMG.test(f.name)) files.push({ path: f.name, date: new Date(f.lastModified).toISOString() });
+        refresh();
+      }
+    });
+
+    function walk(entry, cb) {
+      entry.file ? (entry.file((f) => {
+        if (IMG.test(f.name)) files.push({ path: entry.name, date: new Date(f.lastModified).toISOString() });
+        cb && cb();
+      })) : (entry.createReader().readEntries((es) => {
+        let n = es.length;
+        for (const x of es) walk(x, () => { if (--n === 0) cb && cb(); });
+      }));
+    }
+
+    function manifest() {
+      return {
+        updated: new Date().toISOString(),
+        photos: files
+          .slice()
+          .sort((a, b) => b.date.localeCompare(a.date))
+          .map((f) => ({ path: f.path, date: f.date })),
+      };
+    }
+
+    function refresh() {
+      const n = files.length;
+      stat.textContent = n ? `Найдено файлов: ${n}` : '';
+      gen.disabled = copy.disabled = dl.disabled = !n;
+      if (n) makeJson();
+    }
+
+    function makeJson() {
+      out.textContent = JSON.stringify(manifest(), null, 2);
+      out.classList.add('on');
+    }
+
+    gen.addEventListener('click', makeJson);
+    copy.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(out.textContent);
+      copy.textContent = 'Скопировано ✓';
+      setTimeout(() => (copy.textContent = 'Скопировать'), 1500);
+    });
+    dl.addEventListener('click', () => {
+      const blob = new Blob([out.textContent], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'manifest.json';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    });
+  </script>
+</body>
+</html>

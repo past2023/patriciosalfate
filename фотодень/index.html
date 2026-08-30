@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title data-i18n="pg.pd.meta.title">ФотоДень — фотосессия в отеле, Санкт-Петербург</title>
+  <meta name="description" data-i18n="pg.pd.meta.desc" content="Профессиональная фотосессия в роскошном отеле Санкт-Петербурга. Для моделей, блогеров и личного портфолио.">
+  <meta name="theme-color" content="#0a0a0c">
+  <script>try{if(localStorage.getItem('ps.theme')==='light')document.documentElement.classList.add('light')}catch(e){}</script>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@1,500;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&family=Unbounded:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#main" data-i18n="a11y.skip">К содержанию</a>
+
+  <div id="pre" aria-hidden="true">
+    <div class="pre-top">
+      <span class="pre-word">P<i>.</i>S</span>
+      <span class="mono">© 2026</span>
+    </div>
+    <div style="text-align:right">
+      <div class="pre-num" id="pre-num">000</div>
+      <div class="pre-line" id="pre-line"><b></b></div>
+      <div class="mono pre-label" style="text-align:right" data-i18n="pre.label">Портфолио — Санкт-Петербург</div>
+    </div>
+  </div>
+
+  <div id="cur-dot" aria-hidden="true"></div>
+  <div id="cur-ring" aria-hidden="true"><span></span></div>
+  <div id="progress" aria-hidden="true"></div>
+
+  <header id="site-header">
+    <div class="container head-in">
+      <a class="logo" href="/" aria-label="Patricio Salfate — home">
+        <img id="logo-img" src="/photos/logoamor01.jpg" alt="Patricio Salfate">
+        <span class="logo-fallback">PS<i></i></span>
+      </a>
+      <nav class="nav" aria-label="Основная навигация">
+        <a href="/#work" data-i18n="nav.work">Работы</a>
+        <a href="/#services" data-i18n="nav.services">Услуги</a>
+        <a href="/#about" data-i18n="nav.about">Обо мне</a>
+        <a href="/#contact" data-i18n="nav.contact">Контакты</a>
+        <span class="nav-pages">
+          <span class="nav-sep" aria-hidden="true"></span>
+          <a href="/фотодень/" data-i18n="nav.photoDay">ФотоДень</a>
+          <a href="/интерьерная_фотосъемка/" data-i18n="nav.interior">Интерьер</a>
+          <a href="/веб-дизайн/" data-i18n="nav.webdesign">Веб-дизайн</a>
+          <a href="/cv/" data-i18n="nav.cv">CV</a>
+          <a href="/music/" data-i18n="nav.music">Музыка</a>
+        </span>
+      </nav>
+      <div class="head-right">
+        <button type="button" class="theme-btn" id="theme-btn" data-i18n-title="theme.dark" aria-label="Тема">
+          <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2 12h2.5M19.5 12H22M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+        </button>
+        <div class="lang" role="group" aria-label="Язык / Language">
+          <button type="button" data-lang="ru" class="act">RU</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
+        <button class="burger" id="burger" type="button" aria-expanded="false" aria-label="Меню"><i></i><i></i><i></i></button>
+      </div>
+    </div>
+  </header>
+
+  <div id="menu">
+    <nav class="menu-nav" aria-label="Меню">
+      <a href="/"><span class="idx">⌂</span><span data-i18n="nav.home">Главная</span></a>
+      <a href="/#work"><span class="idx">01</span><span data-i18n="nav.work">Работы</span></a>
+      <a href="/#services"><span class="idx">02</span><span data-i18n="nav.services">Услуги</span></a>
+      <a href="/#about"><span class="idx">03</span><span data-i18n="nav.about">Обо мне</span></a>
+      <a href="/#contact"><span class="idx">04</span><span data-i18n="nav.contact">Контакты</span></a>
+      <div class="menu-pages mono"><span data-i18n="nav.pagesGroup">Страницы</span></div>
+      <a href="/фотодень/"><span class="idx">→</span><span data-i18n="nav.photoDay">ФотоДень</span></a>
+      <a href="/интерьерная_фотосъемка/"><span class="idx">→</span><span data-i18n="nav.interiorFull">Интерьерная съёмка</span></a>
+      <a href="/веб-дизайн/"><span class="idx">→</span><span data-i18n="nav.webdesign">Веб-дизайн</span></a>
+      <a href="/cv/"><span class="idx">→</span><span data-i18n="nav.cv">CV</span></a>
+      <a href="/music/"><span class="idx">→</span><span data-i18n="nav.music">Музыка</span></a>
+    </nav>
+    <div class="menu-foot">
+      <a href="tel:+79643772778">+7 964 377 2778</a>
+      <a href="https://t.me/patriciosalfate" target="_blank" rel="noopener">@patriciosalfate</a>
+      <a href="https://vk.com/patriciosalfate" target="_blank" rel="noopener">vk.com/patriciosalfate</a>
+      <a href="https://wa.me/79643772778" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- ================= HERO ================= -->
+    <section class="p-hero">
+      <img class="p-hero-bg" src="/photos/photonday/IMG_1715-scaled.jpg" alt="" fetchpriority="high">
+      <div class="p-hero-scrim" aria-hidden="true"></div>
+      <div class="laser" aria-hidden="true"></div>
+      <div class="container p-hero-in">
+        <p class="mono p-kicker"><span class="dot" aria-hidden="true"></span><span data-i18n="pg.pd.kicker">Портфолио — съёмки</span></p>
+        <h1 class="p-title" data-i18n="pg.pd.h1">ФотоДень</h1>
+        <p class="p-sub" data-i18n="pg.pd.sub">Профессиональная фотосессия в роскошном отеле Санкт-Петербурга — идеально для моделей, блогеров и красивого личного портфолио.</p>
+      </div>
+    </section>
+
+    <!-- ================= WHO ================= -->
+    <section class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div><h2 class="sec-title" data-i18n="pg.pd.for.t">Для кого подходит фотодень</h2></div>
+        </div>
+        <div class="chips" data-reveal style="margin-top:8px">
+          <span data-i18n="pg.pd.for.1">Модельное портфолио</span>
+          <span data-i18n="pg.pd.for.2">Контент для социальных сетей</span>
+          <span data-i18n="pg.pd.for.3">Fashion-фотографии</span>
+          <span data-i18n="pg.pd.for.4">Lifestyle-фотосессия</span>
+          <span data-i18n="pg.pd.for.5">Красивые личные фотографии</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= WHY ================= -->
+    <section class="sec">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div><h2 class="sec-title" data-i18n="pg.pd.why.t">Почему фотосессия в отеле — это опыт, а не просто съёмка</h2></div>
+          <p class="sec-hint" data-i18n="pg.pd.why.hint">Забудьте о тесных студиях с однотипными фонами: свет, атмосфера и пространство работают на вас.</p>
+        </div>
+        <div class="pcard-grid">
+          <div class="pcard" data-reveal><b data-i18n="pg.pd.why.1.t">Интерьеры, которые говорят за вас</b><p data-i18n="pg.pd.why.1.d">Мрамор, бархат, золотые детали — пока студии предлагают нейтральные стены, отель дарит готовые декорации уровня глянца.</p></div>
+          <div class="pcard" data-reveal><b data-i18n="pg.pd.why.2.t">10 локаций за 1 час съёмки</b><p data-i18n="pg.pd.why.2.d">Лобби, номер с панорамными окнами, терраса, лестница, бар… Вы меняете атмосферу, не выходя из здания.</p></div>
+          <div class="pcard" data-reveal><b data-i18n="pg.pd.why.3.t">Атмосфера luxury без усилий</b><p data-i18n="pg.pd.why.3.d">Шампанское, халат из махры, вид на город… Вы не просто позируете — вы проживаете момент, который хочется повторить.</p></div>
+          <div class="pcard" data-reveal><b data-i18n="pg.pd.why.4.t">Свет, который невозможно имитировать</b><p data-i18n="pg.pd.why.4.d">Большие окна, рассеянный дневной свет, золотой час — природа + профессиональное оборудование = объём в каждом кадре.</p></div>
+          <div class="pcard" data-reveal><b data-i18n="pg.pd.why.5.t">Кадры, которые выделяются в ленте</b><p data-i18n="pg.pd.why.5.d">Ваши изображения будут дышать стилем, контекстом и историей — идеальны для соцсетей и портфолио.</p></div>
+          <div class="pcard" data-reveal><b data-i18n="pg.pd.why.6.t">Комфорт, который расслабляет</b><p data-i18n="pg.pd.why.6.d">Приватная зона, зеркало, место для переодевания, тишина… Естественные эмоции и незажатые позы.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HOW ================= -->
+    <section class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div><h2 class="sec-title" data-i18n="pg.pd.how.t">Как проходит фотодень</h2></div>
+        </div>
+        <ul class="plist">
+          <li data-reveal><i>01</i><span data-i18n="pg.pd.how.1">Индивидуальная фотосессия для каждой модели</span></li>
+          <li data-reveal><i>02</i><span data-i18n="pg.pd.how.2">Помощь с позированием</span></li>
+          <li data-reveal><i>03</i><span data-i18n="pg.pd.how.3">Профессиональный свет</span></li>
+          <li data-reveal><i>04</i><span data-i18n="pg.pd.how.4">Креативные идеи и концепции</span></li>
+          <li data-reveal><i>05</i><span data-i18n="pg.pd.how.5">Комфортная атмосфера съёмки</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= FAST + INCLUDED ================= -->
+    <section class="sec">
+      <div class="container">
+        <div class="fast2">
+          <div class="pcard" data-reveal>
+            <b data-i18n="pg.pd.fast.t">Быстрая обработка</b>
+            <p style="font-size:15px" data-i18n="pg.pd.fast.d">Готовые фотографии вы получите обычно в течение 1–2 дней после съёмки.</p>
+          </div>
+          <div class="pcard" data-reveal>
+            <b data-i18n="pg.pd.inc.t">Всё включено в стоимость</b>
+            <ul class="inclist">
+              <li data-i18n="pg.pd.inc.1">Профессиональная фотосессия</li>
+              <li data-i18n="pg.pd.inc.2">Аренда красивой локации в отеле</li>
+              <li data-i18n="pg.pd.inc.3">Профессиональная обработка фото</li>
+              <li data-i18n="pg.pd.inc.4">Напитки и лёгкие закуски</li>
+              <li data-i18n="pg.pd.inc.5">Помощь с позированием</li>
+              <li data-i18n="pg.pd.inc.6">Профессиональный свет</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PRICES ================= -->
+    <section class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div><h2 class="sec-title" data-i18n="pg.pd.prices.t">Стоимость фотодня</h2></div>
+          <p class="sec-hint" data-i18n="pg.pd.prices.hint">Все пакеты включают фотосессию, аренду локации в отеле, а также напитки и лёгкие закуски во время съёмки.</p>
+        </div>
+        <div class="tar-grid">
+          <div class="tar" data-reveal>
+            <b class="tname" data-i18n="pg.pd.p1.name">Базовый Фотодень</b>
+            <div class="tprice" data-i18n="pg.pd.p1.price">5 000 ₽</div>
+            <div class="ttime" data-i18n="pg.pd.p1.time">1 час съёмки</div>
+            <ul>
+              <li data-i18n="pg.pd.p1.f1">30 обработанных фотографий</li>
+              <li data-i18n="pg.pd.p1.f2">Все удачные кадры</li>
+              <li data-i18n="pg.pd.p1.f3">Аренда локации включена</li>
+              <li data-i18n="pg.pd.p1.f4">Напитки и лёгкие закуски</li>
+            </ul>
+          </div>
+          <div class="tar tar--hot" data-reveal>
+            <span class="hot" data-i18n="pg.pd.p2.hot">Популярный</span>
+            <b class="tname" data-i18n="pg.pd.p2.name">Классический Сет</b>
+            <div class="tprice" data-i18n="pg.pd.p2.price">7 700 ₽</div>
+            <div class="ttime" data-i18n="pg.pd.p2.time">2 часа съёмки</div>
+            <ul>
+              <li data-i18n="pg.pd.p2.f1">200 обработанных фотографий</li>
+              <li data-i18n="pg.pd.p2.f2">Все удачные кадры</li>
+              <li data-i18n="pg.pd.p2.f3">Аренда локации включена</li>
+              <li data-i18n="pg.pd.p2.f4">Напитки и лёгкие закуски</li>
+            </ul>
+          </div>
+          <div class="tar" data-reveal>
+            <b class="tname" data-i18n="pg.pd.p3.name">Премиум Фотосессия</b>
+            <div class="tprice" data-i18n="pg.pd.p3.price">12 000 ₽</div>
+            <div class="ttime" data-i18n="pg.pd.p3.time">3 часа съёмки</div>
+            <ul>
+              <li data-i18n="pg.pd.p3.f1">300 обработанных фотографий</li>
+              <li data-i18n="pg.pd.p3.f2">Все удачные кадры</li>
+              <li data-i18n="pg.pd.p3.f3">Аренда локации включена</li>
+              <li data-i18n="pg.pd.p3.f4">Напитки и лёгкие закуски</li>
+            </ul>
+          </div>
+        </div>
+        <div class="seats" data-reveal>
+          <span class="mono"><b data-i18n="pg.pd.seats.t">Количество мест ограничено</b></span>
+          <p data-i18n="pg.pd.seats.d">Обычно в одном фото-дне участвует только 3–4 модели, чтобы каждая участница получила достаточно времени для качественной индивидуальной съёмки. Поэтому рекомендуем бронировать место заранее.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= GALLERY ================= -->
+    <section class="sec">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div><h2 class="sec-title" data-i18n="pg.gal">Галерея</h2></div>
+        </div>
+        <div class="pmasonry" id="pd-grid" data-reveal></div>
+      </div>
+    </section>
+
+    <!-- ================= AUTHOR ================= -->
+    <section class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="au" data-reveal>
+          <div class="au-txt">
+            <span class="mono p-kicker"><span class="dot" aria-hidden="true"></span><span data-i18n="pg.pd.au.role">Эксперт по съёмке в роскошных отелях</span></span>
+            <p class="it au-quote" data-i18n="pg.pd.au.quote">«Моя цель — не просто сделать фото. Я хочу, чтобы вы почувствовали себя уверенно, наслаждались процессом и ушли с опытом, который хочется повторить.»</p>
+            <div class="chips">
+              <span data-i18n="pg.pd.au.c1">Без стресса</span>
+              <span data-i18n="pg.pd.au.c2">Всё включено</span>
+              <span data-i18n="pg.pd.au.c3">Результат гарантирован</span>
+            </div>
+          </div>
+          <div class="au-side">
+            <p data-i18n="pg.pd.au.d">Более 7 лет я создаю фотографии в лучших отелях Санкт-Петербурга и Москвы. Знаю каждый уголок, каждый источник света, каждый ракурс, который подчеркнёт вашу красоту.</p>
+            <div class="astats">
+              <div class="astat"><b>50+</b><span data-i18n="pg.pd.au.s1">отелей снято</span></div>
+              <div class="astat"><b>200+</b><span data-i18n="pg.pd.au.s2">клиентов довольны</span></div>
+              <div class="astat"><b>100%</b><span data-i18n="pg.pd.au.s3">помощь с позированием</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HOTEL VS STUDIO ================= -->
+    <section class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div><h2 class="sec-title" data-i18n="pg.pd.cmp.t">Отель vs Студия</h2></div>
+          <p class="sec-hint" data-i18n="pg.pd.cmp.hint">Почему отель лучше</p>
+        </div>
+        <div class="cmp-wrap" data-reveal>
+          <table class="cmp">
+            <thead>
+              <tr><th data-i18n="pg.pd.cmp.feat">Преимущество</th><th data-i18n="pg.pd.cmp.hotel">Отель</th><th data-i18n="pg.pd.cmp.studio">Студия</th></tr>
+            </thead>
+            <tbody>
+              <tr><td data-i18n="pg.pd.cmp.r1">Естественный свет</td><td class="yes" data-i18n="pg.pd.cmp.r1a">Да</td><td class="no" data-i18n="pg.pd.cmp.r1b">Нет</td></tr>
+              <tr><td data-i18n="pg.pd.cmp.r2">Разнообразие локаций</td><td class="yes" data-i18n="pg.pd.cmp.r2a">5–10 мест</td><td class="no" data-i18n="pg.pd.cmp.r2b">2–3 фона</td></tr>
+              <tr><td data-i18n="pg.pd.cmp.r3">Атмосфера luxury</td><td class="yes" data-i18n="pg.pd.cmp.r3a">Настоящая</td><td class="no" data-i18n="pg.pd.cmp.r3b">Имитация</td></tr>
+              <tr><td data-i18n="pg.pd.cmp.r4">Полный опыт</td><td class="yes" data-i18n="pg.pd.cmp.r4a">Отдых + фото</td><td class="no" data-i18n="pg.pd.cmp.r4b">Только съёмка</td></tr>
+              <tr><td data-i18n="pg.pd.cmp.r5">Контент для соцсетей</td><td class="yes" data-i18n="pg.pd.cmp.r5a">Уникальный стиль</td><td class="no" data-i18n="pg.pd.cmp.r5b">Шаблоны</td></tr>
+              <tr><td data-i18n="pg.pd.cmp.r6">Приватность и комфорт</td><td class="yes" data-i18n="pg.pd.cmp.r6a">Отдельный номер</td><td class="no" data-i18n="pg.pd.cmp.r6b">Общее пространство</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cmp-foot it" data-reveal data-i18n="pg.pd.cmp.foot">В отеле вы получаете не просто фотографии — вы проживаете опыт, который виден в каждом кадре.</p>
+      </div>
+    </section>
+
+    <!-- ================= FAQ ================= -->
+    <section class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div><h2 class="sec-title" data-i18n="pg.pd.faq.t">Частые вопросы</h2></div>
+        </div>
+        <div class="faq">
+          <details data-reveal><summary data-i18n="pg.pd.faq.q1">Сколько длится фотосессия?</summary><p data-i18n="pg.pd.faq.a1">Длительность зависит от выбранного пакета: 1 час, 2 часа или 3 часа.</p></details>
+          <details data-reveal><summary data-i18n="pg.pd.faq.q2">Включена ли аренда локации?</summary><p data-i18n="pg.pd.faq.a2">Да. Стоимость фотодня полностью включает аренду красивой локации в отеле Санкт-Петербурга.</p></details>
+          <details data-reveal><summary data-i18n="pg.pd.faq.q3">Что входит в стоимость?</summary><p data-i18n="pg.pd.faq.a3">Профессиональная фотосессия, аренда локации, помощь с позированием, обработка фотографий, а также напитки и лёгкие закуски во время съёмки.</p></details>
+          <details data-reveal><summary data-i18n="pg.pd.faq.q4">Когда я получу фотографии?</summary><p data-i18n="pg.pd.faq.a4">Обычно готовые фотографии отправляются в течение 1–2 дней после съёмки.</p></details>
+          <details data-reveal><summary data-i18n="pg.pd.faq.q5">Подходит ли фотодень для начинающих моделей?</summary><p data-i18n="pg.pd.faq.a5">Да, конечно. Я помогаю с позированием и направляю во время всей фотосессии, поэтому опыт не обязателен.</p></details>
+          <details data-reveal><summary data-i18n="pg.pd.faq.q6">Сколько моделей участвует в фотодне?</summary><p data-i18n="pg.pd.faq.a6">Обычно в одном фото-дне участвует только 3–4 модели, чтобы каждая получила достаточно времени для съёмки.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CTA ================= -->
+    <section class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="p-quote" data-reveal>
+          <h2 class="p-cta-h" data-i18n="pg.pd.final.t">Готовы создать что-то прекрасное?</h2>
+          <p class="it" data-i18n="pg.pd.quote">Не просто фото. Опыт, который хочется повторить.</p>
+          <div class="contact-cta">
+            <a class="btn btn--primary magnetic" href="https://max.ru/u/f9LHodD0cOLoePG0Rmk1zH5-Sx1EwiOp3Um5KLAWZi0ST6kvktuLWyzizs4" target="_blank" rel="noopener">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span data-i18n="pg.pd.cta">Забронировать дату в отеле</span> <span class="arr">↗</span>
+            </a>
+            <a class="btn magnetic" href="https://t.me/patriciosalfate" target="_blank" rel="noopener">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
+              <span data-i18n="contact.cta.tg">Написать в Telegram</span> <span class="arr">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="foot-word" aria-hidden="true">SALFATE</div>
+      <div class="foot-grid">
+        <a href="/#work" data-i18n="nav.work">Работы</a>
+        <a href="/#services" data-i18n="nav.services">Услуги</a>
+        <a href="/#about" data-i18n="nav.about">Обо мне</a>
+        <a href="/#contact" data-i18n="nav.contact">Контакты</a>
+      </div>
+      <div class="foot-legal">
+        <span>© <span id="year">2026</span> Patricio Salfate · <span data-i18n="foot.rights">Все права защищены</span></span>
+        <a href="/" data-i18n="foot.top">Наверх ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <noscript>
+    <style>#pre, #cur-dot, #cur-ring, .skel { display:none !important }</style>
+    <div style="padding:120px 24px;text-align:center;color:#8f8c96">Этот сайт требует JavaScript / This site requires JavaScript.</div>
+  </noscript>
+
+  <script>window.PAGE = { grid: { sel: '#pd-grid', folder: 'photonday' } };</script>
+  <script type="module" src="/js/pages.js"></script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title data-i18n="pg.in.meta.title">Интерьерная фотосъёмка — отели, квартиры, рестораны</title>
+  <meta name="description" data-i18n="pg.in.meta.desc" content="Съёмка интерьеров и архитектуры: отели, недвижимость, рестораны. Проекты в России и Чили.">
+  <meta name="theme-color" content="#0a0a0c">
+  <script>try{if(localStorage.getItem('ps.theme')==='light')document.documentElement.classList.add('light')}catch(e){}</script>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@1,500;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&family=Unbounded:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#main" data-i18n="a11y.skip">К содержанию</a>
+
+  <div id="pre" aria-hidden="true">
+    <div class="pre-top">
+      <span class="pre-word">P<i>.</i>S</span>
+      <span class="mono">© 2026</span>
+    </div>
+    <div style="text-align:right">
+      <div class="pre-num" id="pre-num">000</div>
+      <div class="pre-line" id="pre-line"><b></b></div>
+      <div class="mono pre-label" style="text-align:right" data-i18n="pre.label">Портфолио — Санкт-Петербург</div>
+    </div>
+  </div>
+
+  <div id="cur-dot" aria-hidden="true"></div>
+  <div id="cur-ring" aria-hidden="true"><span></span></div>
+  <div id="progress" aria-hidden="true"></div>
+
+  <header id="site-header">
+    <div class="container head-in">
+      <a class="logo" href="/" aria-label="Patricio Salfate — home">
+        <img id="logo-img" src="/photos/logoamor01.jpg" alt="Patricio Salfate">
+        <span class="logo-fallback">PS<i></i></span>
+      </a>
+      <nav class="nav" aria-label="Основная навигация">
+        <a href="/#work" data-i18n="nav.work">Работы</a>
+        <a href="/#services" data-i18n="nav.services">Услуги</a>
+        <a href="/#about" data-i18n="nav.about">Обо мне</a>
+        <a href="/#contact" data-i18n="nav.contact">Контакты</a>
+        <span class="nav-pages">
+          <span class="nav-sep" aria-hidden="true"></span>
+          <a href="/фотодень/" data-i18n="nav.photoDay">ФотоДень</a>
+          <a href="/интерьерная_фотосъемка/" data-i18n="nav.interior">Интерьер</a>
+          <a href="/веб-дизайн/" data-i18n="nav.webdesign">Веб-дизайн</a>
+          <a href="/cv/" data-i18n="nav.cv">CV</a>
+          <a href="/music/" data-i18n="nav.music">Музыка</a>
+        </span>
+      </nav>
+      <div class="head-right">
+        <button type="button" class="theme-btn" id="theme-btn" data-i18n-title="theme.dark" aria-label="Тема">
+          <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2 12h2.5M19.5 12H22M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+        </button>
+        <div class="lang" role="group" aria-label="Язык / Language">
+          <button type="button" data-lang="ru" class="act">RU</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
+        <button class="burger" id="burger" type="button" aria-expanded="false" aria-label="Меню"><i></i><i></i><i></i></button>
+      </div>
+    </div>
+  </header>
+
+  <div id="menu">
+    <nav class="menu-nav" aria-label="Меню">
+      <a href="/"><span class="idx">⌂</span><span data-i18n="nav.home">Главная</span></a>
+      <a href="/#work"><span class="idx">01</span><span data-i18n="nav.work">Работы</span></a>
+      <a href="/#services"><span class="idx">02</span><span data-i18n="nav.services">Услуги</span></a>
+      <a href="/#about"><span class="idx">03</span><span data-i18n="nav.about">Обо мне</span></a>
+      <a href="/#contact"><span class="idx">04</span><span data-i18n="nav.contact">Контакты</span></a>
+      <div class="menu-pages mono"><span data-i18n="nav.pagesGroup">Страницы</span></div>
+      <a href="/фотодень/"><span class="idx">→</span><span data-i18n="nav.photoDay">ФотоДень</span></a>
+      <a href="/интерьерная_фотосъемка/"><span class="idx">→</span><span data-i18n="nav.interiorFull">Интерьерная съёмка</span></a>
+      <a href="/веб-дизайн/"><span class="idx">→</span><span data-i18n="nav.webdesign">Веб-дизайн</span></a>
+      <a href="/cv/"><span class="idx">→</span><span data-i18n="nav.cv">CV</span></a>
+      <a href="/music/"><span class="idx">→</span><span data-i18n="nav.music">Музыка</span></a>
+    </nav>
+    <div class="menu-foot">
+      <a href="tel:+79643772778">+7 964 377 2778</a>
+      <a href="https://t.me/patriciosalfate" target="_blank" rel="noopener">@patriciosalfate</a>
+      <a href="https://vk.com/patriciosalfate" target="_blank" rel="noopener">vk.com/patriciosalfate</a>
+      <a href="https://wa.me/79643772778" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- ================= HERO ================= -->
+    <section class="p-hero">
+      <img class="p-hero-bg" src="/photos/interior/GQ1A5569-HDR-scaled-1.jpg" alt="" fetchpriority="high">
+      <div class="p-hero-scrim" aria-hidden="true"></div>
+      <div class="laser" aria-hidden="true"></div>
+      <div class="container p-hero-in">
+        <p class="mono p-kicker"><span class="dot" aria-hidden="true"></span><span data-i18n="pg.in.kicker">Портфолио — интерьер</span></p>
+        <h1 class="p-title" data-i18n="pg.in.h1">Интерьерная фотосъёмка</h1>
+        <p class="p-sub" data-i18n="pg.in.sub">Отели, квартиры, рестораны и коммерческие пространства — кадры, которые продают и сдают.</p>
+        <div class="chips">
+          <span data-i18n="pg.in.cert">Фотограф, сертифицированный Airbnb</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SERVICES ================= -->
+    <section class="sec">
+      <div class="container">
+        <p data-reveal style="max-width:70ch;color:var(--muted);font-size:15.5px;line-height:1.65" data-i18n="pg.in.p1">Съёмка интерьеров и архитектуры с 2015 года: проекты в России и Чили. От первого кадра до ретуши по стандартам площадок — единый стиль и аккуратная сдача под требования брендов.</p>
+        <div class="pcard-grid" style="margin-top:26px">
+          <div class="pcard" data-reveal><b data-i18n="pg.in.s.1.t">Отели и недвижимость</b><p data-i18n="pg.in.s.1.d">Номера, апартаменты, виллы — кадры для Booking, Airbnb и собственных сайтов.</p></div>
+          <div class="pcard" data-reveal><b data-i18n="pg.in.s.2.t">Рестораны и кафе</b><p data-i18n="pg.in.s.2.d">Залы, кухни, террасы и гастрономия — атмосфера, которую хочется попробовать.</p></div>
+          <div class="pcard" data-reveal><b data-i18n="pg.in.s.3.t">Офисы и коммерция</b><p data-i18n="pg.in.s.3.d">Бизнес-центры, шоурумы, рабочие пространства — порядок, свет и характер бренда.</p></div>
+          <div class="pcard" data-reveal><b data-i18n="pg.in.s.4.t">Архитектура и детали</b><p data-i18n="pg.in.s.4.d">Фасад и интерьер в одном ритме: объём, геометрия и материалы крупным планом.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= WHAT IS INCLUDED ================= -->
+    <section class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div><h2 class="sec-title" data-i18n="pg.in.inc.t">Что входит в стоимость</h2></div>
+        </div>
+        <div class="inc-grid">
+          <div class="pcard" data-reveal><p data-i18n="pg.in.inc.1">Съёмка объекта под ключ — от плана кадров до финальной ретуши</p></div>
+          <div class="pcard" data-reveal><p data-i18n="pg.in.inc.2">Коррекция перспективы и света — пространство «как живое»</p></div>
+          <div class="pcard" data-reveal><p data-i18n="pg.in.inc.3">Ретушь по стандартам Airbnb, Booking и площадок</p></div>
+          <div class="pcard" data-reveal><p data-i18n="pg.in.inc.4">Форматы под задачи: сайт, соцсети, печать</p></div>
+          <div class="pcard" data-reveal><p data-i18n="pg.in.inc.5">Финальные файлы в течение 3–5 дней</p></div>
+          <div class="pcard" data-reveal><p data-i18n="pg.in.inc.6">Консультация по подаче объекта</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PROCESS ================= -->
+    <section class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div><h2 class="sec-title" data-i18n="pg.in.proc.t">Как проходит съёмка</h2></div>
+        </div>
+        <div class="pproc">
+          <div class="pproc-item" data-reveal><i>01</i><b data-i18n="pg.in.proc.1.t">Бриф и задача</b><p data-i18n="pg.in.proc.1.d">Согласуем объект, сроки и площадки, где будут жить кадры.</p></div>
+          <div class="pproc-item" data-reveal><i>02</i><b data-i18n="pg.in.proc.2.t">Подготовка и свет</b><p data-i18n="pg.in.proc.2.d">План кадров, выставляем свет и детали — до первого клика.</p></div>
+          <div class="pproc-item" data-reveal><i>03</i><b data-i18n="pg.in.proc.3.t">Съёмка</b><p data-i18n="pg.in.proc.3.d">Прорабатываем каждую зону: общий план, средний, детали.</p></div>
+          <div class="pproc-item" data-reveal><i>04</i><b data-i18n="pg.in.proc.4.t">Ретушь и выдача</b><p data-i18n="pg.in.proc.4.d">Обработка в едином стиле и файлы в нужных форматах.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PRICES ================= -->
+    <section class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div><h2 class="sec-title" data-i18n="pg.in.prices.t">Стоимость съёмки</h2></div>
+          <p class="sec-hint" data-i18n="pg.in.prices.hint">Ориентиры по форматам. Точную стоимость назову после короткого бесплатного брифа — в зависимости от объекта и задач.</p>
+        </div>
+        <div class="tar-grid">
+          <div class="tar" data-reveal>
+            <b class="tname" data-i18n="pg.in.p1.name">Базовый</b>
+            <div class="tprice" data-i18n="pg.in.p1.price">от 5 000 ₽</div>
+            <div class="ttime" data-i18n="pg.in.p1.time">1 час · до 1 комнаты или зала</div>
+            <ul>
+              <li data-i18n="pg.in.p1.f1">30 обработанных кадров</li>
+              <li data-i18n="pg.in.p1.f2">Ретушь по стандартам площадок</li>
+              <li data-i18n="pg.in.p1.f3">Файлы для сайта и соцсетей</li>
+              <li data-i18n="pg.in.p1.f4">Сдача за 3–5 дней</li>
+            </ul>
+          </div>
+          <div class="tar tar--hot" data-reveal>
+            <span class="hot" data-i18n="pg.in.p2.hot">Частый выбор</span>
+            <b class="tname" data-i18n="pg.in.p2.name">Классика</b>
+            <div class="tprice" data-i18n="pg.in.p2.price">от 7 700 ₽</div>
+            <div class="ttime" data-i18n="pg.in.p2.time">2 часа · до 4 зон</div>
+            <ul>
+              <li data-i18n="pg.in.p2.f1">60 обработанных кадров</li>
+              <li data-i18n="pg.in.p2.f2">Ретушь по стандартам площадок</li>
+              <li data-i18n="pg.in.p2.f3">Файлы для сайта и соцсетей</li>
+              <li data-i18n="pg.in.p2.f4">Сдача за 3–5 дней</li>
+            </ul>
+          </div>
+          <div class="tar" data-reveal>
+            <b class="tname" data-i18n="pg.in.p3.name">Объект целиком</b>
+            <div class="tprice" data-i18n="pg.in.p3.price">от 18 000 ₽</div>
+            <div class="ttime" data-i18n="pg.in.p3.time">полный день · все зоны</div>
+            <ul>
+              <li data-i18n="pg.in.p3.f1">от 120 обработанных кадров</li>
+              <li data-i18n="pg.in.p3.f2">Ретушь по стандартам площадок</li>
+              <li data-i18n="pg.in.p3.f3">Файлы: сайт, соцсети, печать</li>
+              <li data-i18n="pg.in.p3.f4">Сдача частями, без ожидания</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= GALLERY ================= -->
+    <section class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div><h2 class="sec-title" data-i18n="pg.gal">Галерея</h2></div>
+        </div>
+        <div class="pmasonry" id="in-grid" data-reveal></div>
+      </div>
+    </section>
+
+    <!-- ================= CTA ================= -->
+    <section class="sec" style="padding-top:0">
+      <div class="container">
+        <div class="p-quote" data-reveal>
+          <div class="contact-cta">
+            <a class="btn btn--primary magnetic" href="https://max.ru/u/f9LHodD0cOLoePG0Rmk1zH5-Sx1EwiOp3Um5KLAWZi0ST6kvktuLWyzizs4" target="_blank" rel="noopener">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span data-i18n="pg.in.cta">Обсудить проект</span> <span class="arr">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="foot-word" aria-hidden="true">SALFATE</div>
+      <div class="foot-grid">
+        <a href="/#work" data-i18n="nav.work">Работы</a>
+        <a href="/#services" data-i18n="nav.services">Услуги</a>
+        <a href="/#about" data-i18n="nav.about">Обо мне</a>
+        <a href="/#contact" data-i18n="nav.contact">Контакты</a>
+      </div>
+      <div class="foot-legal">
+        <span>© <span id="year">2026</span> Patricio Salfate · <span data-i18n="foot.rights">Все права защищены</span></span>
+        <a href="/" data-i18n="foot.top">Наверх ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <noscript>
+    <style>#pre, #cur-dot, #cur-ring, .skel { display:none !important }</style>
+    <div style="padding:120px 24px;text-align:center;color:#8f8c96">Этот сайт требует JavaScript / This site requires JavaScript.</div>
+  </noscript>
+
+  <script>window.PAGE = { grid: { sel: '#in-grid', folder: 'interior' } };</script>
+  <script type="module" src="/js/pages.js"></script>
+</body>
+</html>
