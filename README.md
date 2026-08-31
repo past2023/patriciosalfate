@@ -23,7 +23,7 @@ The site has five full pages (same design system, RU/EN/ES, both themes):
 | Music | `/music/` | artist Patricio Salfate — official Apple Music embed plus direct Yandex Music and VK Music panels/fallbacks, alongside Spotify, Deezer and Bandcamp links |
 
 The Music page uses the verified Apple Music artist embed. Yandex Music and VK Music
-are linked through their official artist/search pages when a provider does not expose
+are linked through their official playlist/artist pages when a provider does not expose
 a verified embeddable artist or playlist ID; the direct platform cards remain visible
 as reliable fallbacks. No provider IDs are guessed in the markup.
 
