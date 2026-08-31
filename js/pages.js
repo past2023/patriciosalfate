@@ -34,36 +34,34 @@ async function initPhotoGrid(sel, folder) {
     if (!photos.length) { grid.remove(); return; }
     photos.forEach((p, i) => {
       const fig = document.createElement('figure');
-      fig.innerHTML = '<span class="skel"></span><img alt="" loading="lazy" decoding="async">';
+      fig.innerHTML = `<span class="skel"></span><img alt="" loading="${i < 3 ? 'eager' : 'lazy'}" decoding="async">`;
       grid.appendChild(fig);
+      const img = fig.querySelector('img');
+      const showImage = (src) => {
+        /* Attach listeners before assigning src. On mobile, a cached image can
+           complete synchronously and otherwise remain behind the skeleton. */
+        img.onload = () => {
+          fig.querySelector('.skel')?.remove();
+          img.classList.add('ld');
+          setSpan(fig);
+        };
+        img.onerror = () => {
+          if (src !== p.url) {
+            img.onerror = null;
+            img.src = p.url;
+          }
+        };
+        img.src = src;
+      };
+      /* Show the real file immediately; a generated canvas thumbnail replaces
+         it when ready. This keeps the gallery usable on mobile browsers whose
+         canvas/ImageBitmap pipeline is slow or unavailable. */
+      showImage(p.url);
       getThumbUrl(p, 700)
         .then((url) => {
-          const img = fig.querySelector('img');
-          const showImage = (src) => {
-            img.src = src;
-            img.onload = () => {
-              fig.querySelector('.skel')?.remove();
-              img.classList.add('ld');
-              setSpan(fig);
-            };
-            img.onerror = () => {
-              if (src !== p.url) {
-                img.onerror = null;
-                img.src = p.url;
-              }
-            };
-          };
-          showImage(url);
+          if (url !== p.url) showImage(url);
         })
-        .catch(() => {
-          const img = fig.querySelector('img');
-          img.src = p.url;
-          img.onload = () => {
-            fig.querySelector('.skel')?.remove();
-            img.classList.add('ld');
-            setSpan(fig);
-          };
-        });
+        .catch(() => {});
       const openPhoto = () => lb.openPhotos(photos, i);
       fig.addEventListener('click', openPhoto);
       fig.addEventListener('keydown', (e) => {

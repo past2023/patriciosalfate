@@ -324,7 +324,6 @@ body.menu-open .menu-foot{ opacity: 1 }
 }
 .hero-content{
   position: relative; z-index: 3;
-  width: 100%;
   padding-bottom: clamp(84px, 12vh, 130px);
 }
 .hero-kicker{ margin-bottom: 22px; display: flex; align-items: center; gap: 14px }
@@ -1482,4 +1481,38 @@ html.light{ --fx-line: rgba(229,7,140,.28) }
   #site-header::after, .sec-head::before, .sec-head::after, .kicker::before,
   .p-kicker::after, .hm::before, .p-hero::after, .marquee::after{ animation:none !important }
   .btn:hover::before, .btn:focus-visible::before{ animation:none }
+}
+
+/* ============================================================
+   Mobile viewport guard
+   The homepage has wider dynamic blocks (hero, stats, marquees) than the
+   inner pages. Keep flex/grid children shrinkable and the hero aligned to
+   the same container width on narrow screens.
+   ============================================================ */
+html, body{ max-width:100%; }
+@media (max-width: 640px){
+  html, body{ width:100%; overflow-x:hidden; }
+  .container{ max-width:100%; min-width:0; }
+  /* The homepage hero used to opt out of the shared container width. Keep
+     that wide block explicitly inside the viewport without changing the
+     established widths of the inner-page layouts. */
+  .head-in, .head-right, .logo, .hero-content, .about-txt, .sec-head,
+  .ggrid, .sv-list, .vgrid, .ch-grid, .pgrid, .contact-top{ min-width:0; }
+  .head-in{ gap:10px; }
+  .head-right{ gap:8px; flex-shrink:0; }
+  .logo{ flex:1 1 auto; overflow:hidden; }
+  .logo img{ flex:0 0 auto; }
+  .lang{ flex-shrink:0; }
+  .lang button{ padding-inline:8px; }
+  #hero .hero-content{ width:calc(100% - 32px); max-width:100%; min-width:0; padding-inline:0; }
+  #hero .hero-kicker{ min-width:0; }
+  #hero .hero-kicker > span:last-child{ min-width:0; overflow-wrap:anywhere; }
+  #hero-title, .hero-sub, .contact-top h2, .about-txt h2, .stats .stat b, .ch .val{ overflow-wrap:anywhere; }
+  .stats{ grid-template-columns:1fr; gap:16px; }
+  .manager{ grid-template-columns:52px minmax(0,1fr); gap:8px 14px; }
+  .manager .avatar{ width:52px; height:52px; }
+}
+
+@media (max-width: 640px){
+  .pmasonry, .masonry{ grid-template-columns: minmax(0, 1fr); }
 }

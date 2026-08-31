@@ -93,11 +93,11 @@
 
   <header id="site-header">
     <div class="container head-in">
-      <a class="logo" href="/" aria-label="Patricio Salfate — home">
+      <a class="logo" href="/" data-i18n-aria="a11y.home" aria-label="Patricio Salfate — home">
         <img id="logo-img" src="/photos/logoamor01.jpg" alt="Patricio Salfate">
         <span class="logo-fallback">PS<i></i></span>
       </a>
-      <nav class="nav" aria-label="Основная навигация">
+      <nav class="nav" data-i18n-aria="a11y.nav" aria-label="Основная навигация">
         <a href="/#work" data-i18n="nav.work">Работы</a>
         <a href="/#services" data-i18n="nav.services">Услуги</a>
         <a href="/#about" data-i18n="nav.about">Обо мне</a>
@@ -116,17 +116,18 @@
           <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
           <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2 12h2.5M19.5 12H22M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
         </button>
-        <div class="lang" role="group" aria-label="Язык / Language">
+        <div class="lang" role="group" data-i18n-aria="a11y.language" aria-label="Язык / Language">
           <button type="button" data-lang="ru" class="act">RU</button>
           <button type="button" data-lang="en">EN</button>
+          <button type="button" data-lang="es">ES</button>
         </div>
-        <button class="burger" id="burger" type="button" aria-expanded="false" aria-label="Меню"><i></i><i></i><i></i></button>
+        <button class="burger" id="burger" type="button" data-i18n-aria="nav.open" aria-expanded="false" aria-label="Меню"><i></i><i></i><i></i></button>
       </div>
     </div>
   </header>
 
   <div id="menu">
-    <nav class="menu-nav" aria-label="Меню">
+    <nav class="menu-nav" data-i18n-aria="a11y.menu" aria-label="Меню">
       <a href="/"><span class="idx">⌂</span><span data-i18n="nav.home">Главная</span></a>
       <a href="/#work"><span class="idx">01</span><span data-i18n="nav.work">Работы</span></a>
       <a href="/#services"><span class="idx">02</span><span data-i18n="nav.services">Услуги</span></a>

@@ -124,7 +124,8 @@ async function buildWorkGrid() {
     if (cover) {
       const img = card.querySelector('img');
       const showCover = (url) => {
-        img.src = url;
+        /* Register handlers before src: cached mobile loads can otherwise
+           finish before the opacity class is applied. */
         img.onload = () => img.classList.add('ld');
         img.onerror = () => {
           if (url !== cover.url) {
@@ -132,10 +133,12 @@ async function buildWorkGrid() {
             img.src = cover.url;
           }
         };
+        img.src = url;
       };
+      showCover(cover.url);
       getThumbUrl(cover, 900)
-        .then(showCover)
-        .catch(() => showCover(cover.url));
+        .then((url) => { if (url !== cover.url) showCover(url); })
+        .catch(() => {});
     }
 
     const openCard = () => openOverlay(g.slug);
@@ -296,7 +299,8 @@ function renderOverlayGrid(entry) {
         if (release && url) releaseThumbs([url]);
         return;
       }
-      img.src = url;
+      /* Attach handlers before src: especially on mobile, a cached blob URL
+         may finish before an onload handler attached afterwards. */
       img.onload = () => { img.classList.add('ld'); setMSpan(fig); };
       img.onerror = () => {
         /* A generated thumbnail can fail independently of the original.
@@ -306,6 +310,7 @@ function renderOverlayGrid(entry) {
           img.src = p.url;
         }
       };
+      img.src = url;
       if (release && url.startsWith('blob:')) state.overlayUrls.push(url);
     };
     getThumbUrl(p, 720)

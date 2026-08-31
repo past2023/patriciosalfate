@@ -217,7 +217,13 @@ export function getThumbUrl(photo, w = 800) {
   });
 
   inFlight.set(key, p);
-  p.finally(() => inFlight.delete(key));
+  /* Use a two-branch cleanup instead of ignoring finally's returned promise;
+     an ignored rejected finally-chain can become an unhandled rejection on
+     mobile browsers even though callers handle the original promise. */
+  p.then(
+    () => inFlight.delete(key),
+    () => inFlight.delete(key)
+  );
   return p;
 }
 

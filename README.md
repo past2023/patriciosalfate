@@ -12,7 +12,7 @@ background) and back — the choice is remembered in the browser.
 
 ## 📄 Pages
 
-The site has five full pages (same design system, RU/EN, both themes):
+The site has five full pages (same design system, RU/EN/ES, both themes):
 
 | Page | URL | Content |
 |---|---|---|
@@ -156,7 +156,7 @@ photos/             ← UPLOAD YOUR PHOTOS HERE
 
 ## ✏️ What to change where
 
-- **Texts (RU/EN)** — `js/i18n.js` (every string exists in both languages).
+- **Texts (RU/EN/ES)** — `js/i18n.js` (every current UI string exists in all three languages; Spanish falls back to English for future keys).
 - **Galleries** — `js/config.js` → `galleries: [{ slug: 'photo', span: 'a' }]`
   (span: `a` = vertical card 4:5, `b` = horizontal 3:2).
   Gallery texts — `js/i18n.js` → `gallery.<slug>.title/desc`.
@@ -183,8 +183,8 @@ photos/             ← UPLOAD YOUR PHOTOS HERE
 - **Laser sweep** across the hero photo and over work cards on hover —
   the modern replacement for film grain.
 - **Themes**: dark by default, light via the toggle — both are remembered.
-- **RU/EN** — the default is **RU**; EN only when the user clicks the
-  button (the choice is remembered), `?lang=en` works by link.
+- **RU/EN/ES** — the default is **RU**; EN or ES when the user clicks the
+  selector (the choice is remembered), `?lang=en` and `?lang=es` work by link.
 - **Animations**: preloader with counter, scramble headline, laser sweep,
   scroll reveals, parallax, magnetic buttons, marquees, custom cursor.
 - **Accessibility**: `prefers-reduced-motion` disables animations, semantic
