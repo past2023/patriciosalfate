@@ -1,0 +1,146 @@
+{
+  "updated": "2026-08-30T20:02:03.819594Z",
+  "note": "Fallback for hosts without directory listing. Local files are merged with a live listing when available.",
+  "photos": [
+    {
+      "path": "1650434834818-scaled-1-2.jpg",
+      "date": "2026-08-30T19:32:44.068264Z"
+    },
+    {
+      "path": "1651005441145-scaled-2.jpg",
+      "date": "2026-08-30T19:32:44.068264Z"
+    },
+    {
+      "path": "1652438629780-scaled-1-2.jpg",
+      "date": "2026-08-30T19:32:44.068264Z"
+    },
+    {
+      "path": "IMG_0127-1-scaled.jpg",
+      "date": "2026-08-30T19:32:44.072264Z"
+    },
+    {
+      "path": "IMG_0386-scaled.jpg",
+      "date": "2026-08-30T19:32:44.072264Z"
+    },
+    {
+      "path": "IMG_0393-scaled.jpg",
+      "date": "2026-08-30T19:32:44.072264Z"
+    },
+    {
+      "path": "IMG_08981-scaled.jpg",
+      "date": "2026-08-30T19:32:44.076264Z"
+    },
+    {
+      "path": "IMG_0914-scaled.jpg",
+      "date": "2026-08-30T19:32:44.076264Z"
+    },
+    {
+      "path": "IMG_0929-1-scaled.jpg",
+      "date": "2026-08-30T19:32:44.076264Z"
+    },
+    {
+      "path": "IMG_0964-scaled.jpg",
+      "date": "2026-08-30T19:32:44.080264Z"
+    },
+    {
+      "path": "IMG_0974-scaled.jpg",
+      "date": "2026-08-30T19:32:44.080264Z"
+    },
+    {
+      "path": "IMG_1165-scaled.jpg",
+      "date": "2026-08-30T19:32:44.080264Z"
+    },
+    {
+      "path": "IMG_1186-scaled.jpg",
+      "date": "2026-08-30T19:32:44.084264Z"
+    },
+    {
+      "path": "IMG_1645-scaled.jpg",
+      "date": "2026-08-30T19:32:44.084264Z"
+    },
+    {
+      "path": "IMG_1685-scaled.jpg",
+      "date": "2026-08-30T19:32:44.084264Z"
+    },
+    {
+      "path": "IMG_1715-scaled.jpg",
+      "date": "2026-08-30T19:32:44.084264Z"
+    },
+    {
+      "path": "IMG_1743-scaled.jpg",
+      "date": "2026-08-30T19:32:44.088264Z"
+    },
+    {
+      "path": "IMG_1749-scaled.jpg",
+      "date": "2026-08-30T19:32:44.088264Z"
+    },
+    {
+      "path": "IMG_1962-scaled.jpg",
+      "date": "2026-08-30T19:32:44.092264Z"
+    },
+    {
+      "path": "IMG_20260311_112706_454-2.jpg",
+      "date": "2026-08-30T19:32:44.092264Z"
+    },
+    {
+      "path": "IMG_2532v-1-scaled.jpg",
+      "date": "2026-08-30T19:32:44.096264Z"
+    },
+    {
+      "path": "IMG_2649-scaled.jpg",
+      "date": "2026-08-30T19:32:44.096264Z"
+    },
+    {
+      "path": "IMG_2765-scaled.jpg",
+      "date": "2026-08-30T19:32:44.096264Z"
+    },
+    {
+      "path": "IMG_2846-scaled.jpg",
+      "date": "2026-08-30T19:32:44.100264Z"
+    },
+    {
+      "path": "IMG_2910-scaled.jpg",
+      "date": "2026-08-30T19:32:44.100264Z"
+    },
+    {
+      "path": "IMG_2990-scaled.jpg",
+      "date": "2026-08-30T19:32:44.100264Z"
+    },
+    {
+      "path": "IMG_5904-scaled.jpg",
+      "date": "2026-08-30T19:32:44.104264Z"
+    },
+    {
+      "path": "IMG_6081-1-scaled.jpg",
+      "date": "2026-08-30T19:32:44.104264Z"
+    },
+    {
+      "path": "IMG_6266-scaled.jpg",
+      "date": "2026-08-30T19:32:44.104264Z"
+    },
+    {
+      "path": "IMG_7218-scaled.jpg",
+      "date": "2026-08-30T19:32:44.108264Z"
+    },
+    {
+      "path": "IMG_7477-scaled.jpg",
+      "date": "2026-08-30T19:32:44.108264Z"
+    },
+    {
+      "path": "IMG_7487-scaled.jpg",
+      "date": "2026-08-30T19:32:44.108264Z"
+    },
+    {
+      "path": "IMG_7496-scaled.jpg",
+      "date": "2026-08-30T19:32:44.108264Z"
+    },
+    {
+      "path": "IMG_8756-scaled.jpg",
+      "date": "2026-08-30T19:32:44.112264Z"
+    },
+    {
+      "path": "image-5-2.jpg",
+      "date": "2026-08-30T19:32:44.116264Z"
+    }
+  ]
+}

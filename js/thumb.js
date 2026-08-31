@@ -217,15 +217,28 @@ export function getThumbUrl(photo, w = 800) {
   });
 
   inFlight.set(key, p);
-  p.finally(() => inFlight.delete(key));
+  /* Use a two-branch cleanup instead of ignoring finally's returned promise;
+     an ignored rejected finally-chain can become an unhandled rejection on
+     mobile browsers even though callers handle the original promise. */
+  p.then(
+    () => inFlight.delete(key),
+    () => inFlight.delete(key)
+  );
   return p;
 }
 
 /* revoke object URLs of a gallery when its overlay closes (IDB keeps them) */
 export function releaseThumbs(urls) {
-  urls.forEach((u) => {
-    if (u && u.startsWith('blob:')) {
-      try { URL.revokeObjectURL(u); } catch (_) {}
-    }
+  const released = new Set(urls.filter((u) => u && u.startsWith('blob:')));
+  if (!released.size) return;
+
+  /* A revoked object URL must leave the memory cache too. Otherwise a
+     reopened gallery can receive the same, now-dead URL and render a blank
+     tile. It will be regenerated from IndexedDB on the next request. */
+  for (const [key, url] of mem) {
+    if (released.has(url)) mem.delete(key);
+  }
+  released.forEach((u) => {
+    try { URL.revokeObjectURL(u); } catch (_) {}
   });
 }

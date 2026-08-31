@@ -71,6 +71,7 @@ body{
   font-size: 16px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
 img{ display:block; max-width:100% }
@@ -323,7 +324,6 @@ body.menu-open .menu-foot{ opacity: 1 }
 }
 .hero-content{
   position: relative; z-index: 3;
-  width: 100%;
   padding-bottom: clamp(84px, 12vh, 130px);
 }
 .hero-kicker{ margin-bottom: 22px; display: flex; align-items: center; gap: 14px }
@@ -508,10 +508,10 @@ body.ready #hero-title .line-in{ transform: none }
    row spans are set by JS from each photo's real ratio */
 .masonry{
   display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 14px; grid-auto-rows: 10px;
+  gap: 14px; grid-auto-rows: 10px; grid-auto-flow: dense;
 }
 .m-item{
-  position: relative; grid-row-end: span 42; min-height: 200px;
+  position: relative; grid-row-end: span 20; min-height: 200px;
   border-radius: 12px; overflow: hidden; background: var(--surface); cursor: zoom-in;
 }
 .m-item .skel, .m-item img{
@@ -541,48 +541,67 @@ body.ready #hero-title .line-in{ transform: none }
 
 /* ---------- lightbox ---------- */
 #lb{
-  position: fixed; inset: 0; z-index: 115;
-  background: var(--lb-bg);
+  position: fixed; inset: 0; z-index: 115; overflow: hidden; isolation: isolate;
+  background:
+    radial-gradient(75% 65% at 50% 45%, rgba(255,46,166,.08), transparent 68%),
+    var(--lb-bg);
   opacity: 0; visibility: hidden; transition: opacity .4s var(--ease), visibility 0s .4s;
   touch-action: none;
 }
 #lb.open{ opacity: 1; visibility: visible; transition: opacity .4s var(--ease) }
-#lb-canvas{ position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab }
+#lb::after{
+  content: ""; position: absolute; z-index: 2; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(7,7,9,.38), transparent 20%, transparent 78%, rgba(7,7,9,.52));
+}
+#lb-canvas{ position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; cursor: grab; touch-action: none }
 #lb-canvas.grabbing{ cursor: grabbing }
 .lb-top{
   position: absolute; z-index: 5; top: 0; left: 0; right: 0;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 26px; pointer-events: none;
+  display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  padding: max(20px, env(safe-area-inset-top)) max(26px, env(safe-area-inset-right)) 20px max(26px, env(safe-area-inset-left));
+  pointer-events: none;
 }
 .lb-top > *{ pointer-events: auto }
-.lb-count{ font-family: var(--font-m); font-size: 12px; letter-spacing: .2em; color: var(--text) }
+.lb-count{
+  padding: 10px 14px; border: 1px solid rgba(240,236,228,.2); border-radius: 999px;
+  background: rgba(10,10,12,.42); backdrop-filter: blur(12px);
+  font-family: var(--font-m); font-size: 12px; letter-spacing: .2em; color: var(--text);
+}
 .lb-count b{ color: var(--accent); font-weight: 500 }
 .lb-arrow{
   position: absolute; z-index: 5; top: 50%; transform: translateY(-50%);
   width: 58px; height: 58px; border-radius: 50%;
-  border: 1px solid var(--line2); background: rgba(10,10,12,.45); backdrop-filter: blur(8px);
+  border: 1px solid rgba(240,236,228,.28); background: rgba(10,10,12,.42); backdrop-filter: blur(10px);
   display: grid; place-items: center; font-size: 22px;
-  transition: background .3s, border-color .3s, color .3s, opacity .3s;
+  transition: background .3s, border-color .3s, color .3s, opacity .3s, transform .3s var(--ease);
 }
-.lb-arrow:hover{ background: var(--accent); border-color: var(--accent); color: var(--accent-ink) }
-.lb-prev{ left: 22px } .lb-next{ right: 22px }
-@media (max-width: 720px){
-  .lb-arrow{ width: 46px; height: 46px; font-size: 18px; top: auto; bottom: 86px; transform: none }
-  .lb-prev{ left: 14px } .lb-next{ right: 14px }
-}
+.lb-arrow:hover{ background: var(--accent); border-color: var(--accent); color: var(--accent-ink); transform: translateY(-50%) scale(1.06) }
+.lb-prev{ left: max(22px, env(safe-area-inset-left)) } .lb-next{ right: max(22px, env(safe-area-inset-right)) }
 .lb-bottom{
   position: absolute; z-index: 5; left: 0; right: 0; bottom: 0;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 20px 26px; pointer-events: none;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 22px;
+  padding: 20px max(26px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(26px, env(safe-area-inset-left));
+  pointer-events: none;
 }
 .lb-bottom > *{ pointer-events: auto }
-.lb-name{ font-family: var(--font-m); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60vw }
-.lb-ctrl{ display: flex; align-items: center; gap: 10px }
-.lb-zoom{ font-family: var(--font-m); font-size: 11px; letter-spacing: .12em; color: var(--muted); min-width: 48px; text-align: right }
+.lb-caption{ min-width: 0; display: flex; flex-direction: column; gap: 7px }
+.lb-name{ font-family: var(--font-m); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: min(42vw, 520px) }
+.lb-hint{ font-family: var(--font-m); font-size: 10px; letter-spacing: .08em; color: var(--muted); opacity: .85 }
+.lb-ctrl{
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  padding: 6px; border: 1px solid rgba(240,236,228,.18); border-radius: 999px;
+  background: rgba(10,10,12,.46); backdrop-filter: blur(12px);
+}
+.lb-ctrl .icon-btn{ width: 38px; height: 38px; border-color: transparent }
+.lb-ctrl .icon-btn:hover{ border-color: var(--accent) }
+.lb-ctrl .icon-btn svg{ width: 16px; height: 16px }
+.lb-fit .fit-icon{ transition: transform .4s var(--ease) }
+.lb-fit.is-contain .fit-icon{ transform: rotate(180deg) }
+.lb-zoom{ font-family: var(--font-m); font-size: 11px; letter-spacing: .12em; color: var(--text); min-width: 48px; text-align: center }
 .lb-load{
   position: absolute; z-index: 4; top: 50%; left: 50%;
   width: 44px; height: 44px; margin: -22px;
-  border-radius: 50%; border: 2px solid var(--line2); border-top-color: var(--accent);
+  border-radius: 50%; border: 2px solid rgba(240,236,228,.25); border-top-color: var(--accent);
   animation: spin .9s linear infinite;
   opacity: 0; transition: opacity .3s; pointer-events: none;
 }
@@ -594,6 +613,28 @@ body.ready #hero-title .line-in{ transform: none }
   font-family: var(--font-m); font-size: 12px; letter-spacing: .08em;
 }
 .lb-err.on{ display: flex }
+@media (max-width: 720px){
+  .lb-arrow{ width: 46px; height: 46px; font-size: 18px; top: auto; bottom: calc(92px + env(safe-area-inset-bottom)); transform: none }
+  .lb-arrow:hover{ transform: scale(1.06) }
+  .lb-prev{ left: max(14px, env(safe-area-inset-left)) } .lb-next{ right: max(14px, env(safe-area-inset-right)) }
+  .lb-bottom{ align-items: center; gap: 10px; padding-top: 14px }
+  .lb-name{ max-width: 34vw }
+  .lb-hint{ display: none }
+  .lb-ctrl{ gap: 2px; padding: 4px }
+  .lb-ctrl .icon-btn{ width: 34px; height: 34px }
+  .lb-zoom{ min-width: 42px; font-size: 10px }
+}
+@media (max-width: 430px){
+  .lb-caption{ display: none }
+  .lb-bottom{ justify-content: flex-end }
+}
+html.light #lb::after{ background: linear-gradient(180deg, rgba(250,248,243,.5), transparent 20%, transparent 78%, rgba(250,248,243,.62)) }
+html.light .lb-count,
+html.light .lb-ctrl,
+html.light .lb-arrow{ background: rgba(250,248,243,.62); border-color: rgba(24,18,12,.2) }
+@media (prefers-reduced-motion: reduce){
+  #ov, #lb, #lb-canvas, .lb-arrow, .lb-fit .fit-icon{ transition: none !important }
+}
 
 /* ---------- services ---------- */
 .sv-list{ border-bottom: 1px solid var(--line) }
@@ -792,11 +833,53 @@ html.light .theme-btn .ico-moon{ display: none }
 /* ---------- footer ---------- */
 footer{ border-top: 1px solid var(--line); padding: 40px 0 34px; position: relative; overflow: hidden }
 .foot-word{
-  font-family: var(--font-x); font-weight: 700; text-transform: uppercase;
+  position: relative; font-family: var(--font-x); font-weight: 700; text-transform: uppercase;
   font-size: clamp(3rem, 11vw, 10.5rem); line-height: .9; letter-spacing: .01em;
-  color: var(--ghost); -webkit-text-stroke: .05em currentColor;  /* same heavy treatment as the hero title */
+  color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: clamp(1px, .025em, 3px) var(--ghost);
   white-space: nowrap; user-select: none;
   margin-bottom: 44px;
+  animation: foot-word-fx 14s ease-in-out infinite;
+  will-change: transform, filter;
+}
+/* The base stays quiet; these two clipped copies create a brief RGB/data
+   glitch roughly once every fourteen seconds instead of constant motion. */
+.foot-word::before, .foot-word::after{
+  content: attr(data-text); position: absolute; inset: 0;
+  color: transparent; -webkit-text-fill-color: transparent;
+  pointer-events: none; opacity: 0; white-space: inherit;
+  -webkit-text-stroke: clamp(1px, .025em, 3px) var(--accent);
+  will-change: transform, clip-path, opacity;
+}
+.foot-word::before{ animation: foot-word-slice-a 14s steps(1, end) infinite }
+.foot-word::after{
+  -webkit-text-stroke-color: #8cecf2;
+  animation: foot-word-slice-b 14s steps(1, end) infinite;
+}
+@keyframes foot-word-fx{
+  0%, 76%, 100%{ transform: translate3d(0, 0, 0); filter: none }
+  78%{ transform: translate3d(.012em, 0, 0); filter: drop-shadow(0 0 14px var(--accent-soft)) }
+  79%{ transform: translate3d(-.008em, 0, 0); filter: none }
+  81%{ transform: translate3d(0, 0, 0); filter: drop-shadow(0 0 7px var(--accent-soft)) }
+  83%{ transform: translate3d(0, 0, 0); filter: none }
+}
+@keyframes foot-word-slice-a{
+  0%, 75%, 100%{ opacity: 0; clip-path: inset(0 0 0 0); transform: translate3d(0, 0, 0) }
+  77%{ opacity: .9; clip-path: inset(9% 0 63% 0); transform: translate3d(-.018em, .012em, 0) }
+  79%{ opacity: 0; clip-path: inset(0 0 0 0); transform: none }
+  81%{ opacity: .72; clip-path: inset(66% 0 12% 0); transform: translate3d(.024em, -.008em, 0) }
+  83%{ opacity: 0 }
+}
+@keyframes foot-word-slice-b{
+  0%, 76%, 100%{ opacity: 0; clip-path: inset(0 0 0 0); transform: translate3d(0, 0, 0) }
+  78%{ opacity: .72; clip-path: inset(41% 0 36% 0); transform: translate3d(.02em, -.01em, 0) }
+  80%{ opacity: 0; clip-path: inset(0 0 0 0); transform: none }
+  82%{ opacity: .8; clip-path: inset(16% 0 70% 0); transform: translate3d(-.028em, .006em, 0) }
+  84%{ opacity: 0 }
+}
+@media (prefers-reduced-motion: reduce){
+  .foot-word, .foot-word::before, .foot-word::after{ animation: none !important }
+  .foot-word::before, .foot-word::after{ display: none }
 }
 .foot-grid{ display: flex; flex-wrap: wrap; gap: 18px 40px; align-items: center; justify-content: space-between }
 .foot-grid a{ font-family: var(--font-m); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); transition: color .3s }
@@ -890,10 +973,10 @@ html.light{ --p-sub: #4a4238 }
    no column gaps, every cell filled edge to edge */
 .pmasonry{
   display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 14px; grid-auto-rows: 10px;
+  gap: 14px; grid-auto-rows: 10px; grid-auto-flow: dense;
 }
 .pmasonry figure{
-  position: relative; grid-row-end: span 42;
+  position: relative; grid-row-end: span 20;
   border-radius: 12px; overflow: hidden; cursor: zoom-in;
   background: var(--skel-a); min-height: 220px;
 }
@@ -1229,4 +1312,374 @@ html.light #starfield{ display: none }
   box-shadow: 0 0 24px rgba(255,46,166,.35);
   mix-blend-mode: screen; pointer-events: none;
   animation: fx-scan .8s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+/* ============================================================
+   Rev 7 — technical editorial motion system
+   Small, precise movements keep the site fashion-editorial rather than
+   noisy: most effects idle, then wake on hover/focus or at long intervals.
+   ============================================================ */
+
+:root{ --fx-cyan: #8cecf2; --fx-line: rgba(140,236,242,.34) }
+html.light{ --fx-line: rgba(229,7,140,.28) }
+
+/* Header and section rules behave like a slow instrument readout. */
+#site-header::after{
+  content:""; position:absolute; left:0; bottom:-1px; width:22%; height:1px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--fx-cyan), transparent);
+  animation: header-run 18s linear infinite;
+  pointer-events:none;
+}
+@keyframes header-run{
+  0%{ transform: translateX(-110%) scaleX(.55); opacity:0 }
+  8%,82%{ opacity:.8 }
+  100%{ transform: translateX(560%) scaleX(1.2); opacity:0 }
+}
+.sec-head{ position:relative }
+.sec-head::before{
+  content:""; position:absolute; left:0; bottom:-1px; width:clamp(46px, 8vw, 118px); height:2px;
+  transform-origin:left; background:linear-gradient(90deg, var(--accent), var(--fx-cyan), transparent);
+  animation: rule-breathe 11s ease-in-out infinite;
+  pointer-events:none;
+}
+.sec-head::after{
+  content:""; position:absolute; right:0; bottom:-3px; width:6px; height:6px;
+  border:1px solid var(--accent); transform:rotate(45deg);
+  animation: rule-node 7s ease-in-out infinite;
+  pointer-events:none;
+}
+.sec-head .idx::before{
+  content:"//"; margin-right:9px; color:var(--fx-cyan); opacity:.72;
+}
+@keyframes rule-breathe{
+  0%, 70%, 100%{ transform:scaleX(.55); opacity:.55 }
+  74%{ transform:scaleX(1); opacity:1 }
+  78%{ transform:scaleX(.72); opacity:.7 }
+}
+@keyframes rule-node{
+  0%, 72%, 100%{ transform:rotate(45deg) scale(.7); opacity:.45 }
+  76%{ transform:rotate(135deg) scale(1.35); opacity:1; box-shadow:0 0 0 4px var(--accent-soft) }
+  82%{ transform:rotate(225deg) scale(.7); opacity:.45; box-shadow:none }
+}
+.kicker::before{ transform-origin:left; animation:kicker-line 9s ease-in-out infinite }
+@keyframes kicker-line{
+  0%, 72%, 100%{ transform:scaleX(.62); opacity:.65 }
+  76%{ transform:scaleX(1); opacity:1 }
+  80%{ transform:scaleX(.78); opacity:.75 }
+}
+
+/* Editorial buttons get a controlled light sweep instead of a flat fill. */
+.btn{ overflow:hidden; isolation:isolate }
+.btn::before{
+  content:""; position:absolute; z-index:0; top:-70%; bottom:-70%; left:-45%; width:25%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.42), transparent);
+  transform:translateX(-180%) skewX(-18deg); opacity:0; pointer-events:none;
+}
+.btn > *{ position:relative; z-index:1 }
+.btn:hover::before, .btn:focus-visible::before{
+  opacity:1; animation:btn-sheen .85s var(--ease) both;
+}
+@keyframes btn-sheen{ to{ transform:translateX(760%) skewX(-18deg) } }
+.menu-nav a{ position:relative }
+.menu-nav a::after{
+  content:""; position:absolute; left:0; right:0; bottom:-.32em; height:1px;
+  background:linear-gradient(90deg, var(--accent), var(--fx-cyan), transparent);
+  transform:scaleX(0); transform-origin:right; transition:transform .65s var(--ease);
+}
+.menu-nav a:hover::after, .menu-nav a:focus-visible::after{ transform:scaleX(1); transform-origin:left }
+.p-kicker::after{
+  content:""; width:54px; height:1px; margin-left:4px;
+  background:linear-gradient(90deg, var(--accent), var(--fx-cyan), transparent);
+  transform-origin:left; animation:kicker-trace 10s ease-in-out infinite;
+}
+@keyframes kicker-trace{
+  0%, 72%, 100%{ transform:scaleX(.5); opacity:.5 }
+  77%{ transform:scaleX(1); opacity:1 }
+  82%{ transform:scaleX(.72); opacity:.7 }
+}
+.hm{ position:relative }
+.hm::before{
+  content:""; position:absolute; left:0; top:-1px; width:32px; height:1px;
+  background:linear-gradient(90deg, var(--accent), var(--fx-cyan), transparent);
+  animation:meta-trace 9s ease-in-out infinite;
+}
+@keyframes meta-trace{
+  0%, 70%, 100%{ width:28px; opacity:.55 }
+  76%{ width:100%; opacity:1 }
+  82%{ width:48%; opacity:.72 }
+}
+.foot-grid a{ position:relative; padding-bottom:5px }
+.foot-grid a::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:1px;
+  background:linear-gradient(90deg, var(--accent), var(--fx-cyan));
+  transform:scaleX(0); transform-origin:right; transition:transform .5s var(--ease);
+}
+.foot-grid a:hover::after, .foot-grid a:focus-visible::after{ transform:scaleX(1); transform-origin:left }
+
+/* One-corner brackets are shared by the image and information surfaces. */
+.gcard::before, .m-item::before, .vcard::before{
+  content:""; position:absolute; z-index:4; top:13px; left:13px; width:30px; height:30px;
+  border-top:1px solid var(--fx-cyan); border-left:1px solid var(--fx-cyan);
+  opacity:0; transform:translate(-5px, -5px); transition:opacity .45s var(--ease), transform .55s var(--ease);
+  pointer-events:none;
+}
+.gcard:hover::before, .gcard:focus-visible::before,
+.m-item:hover::before, .m-item:focus-visible::before,
+.vcard:hover::before, .vcard:focus-visible::before{ opacity:.9; transform:none }
+.gcard:focus-visible, .m-item:focus-visible, .vcard:focus-visible{ outline:2px solid var(--accent); outline-offset:4px }
+
+/* Fine lines that wake up on interactive data blocks. */
+.sv-row, .pstep, .stat, .pcard, .plist li, .proj, .tl-item,
+.ch, .pproc-item, .astat, .seats, .faq details, .cmp-wrap{
+  position:relative;
+}
+.sv-row::before, .pstep::before, .stat::before, .pcard::before,
+.proj::before, .tl-item::before, .ch::before, .pproc-item::before,
+.astat::before, .seats::before, .faq details::before, .cmp-wrap::before{
+  content:""; position:absolute; z-index:2; top:-1px; left:0; width:38px; height:1px;
+  background:linear-gradient(90deg, var(--accent), var(--fx-cyan), transparent);
+  transition:width .65s var(--ease), opacity .35s; opacity:.72; pointer-events:none;
+}
+.sv-row:hover::before, .sv-row.open::before, .pstep:hover::before, .stat:hover::before,
+.pcard:hover::before, .proj:hover::before, .tl-item:hover::before,
+.ch:hover::before, .pproc-item:hover::before, .astat:hover::before, .seats:hover::before,
+.faq details[open]::before, .cmp-wrap:hover::before{ width:100%; opacity:1 }
+.sv-row::after{
+  content:""; position:absolute; right:0; top:0; width:0; height:1px;
+  background:var(--fx-cyan); opacity:0; transition:width .55s var(--ease), opacity .3s; pointer-events:none;
+}
+.sv-row:hover::after, .sv-row.open::after{ width:24%; opacity:.7 }
+.sv-idx, .pstep .n, .tl-item .period{ text-shadow:0 0 12px var(--accent-soft) }
+
+/* Page heroes receive a barely-visible scan texture behind their copy. */
+.p-hero::after{
+  content:""; position:absolute; z-index:2; inset:0; pointer-events:none; opacity:.13;
+  background:repeating-linear-gradient(180deg, transparent 0 7px, var(--fx-line) 8px, transparent 9px);
+  mix-blend-mode:screen; animation:hero-scanlines 16s linear infinite;
+}
+@keyframes hero-scanlines{
+  0%{ background-position:0 -90px; opacity:0 }
+  10%,82%{ opacity:.13 }
+  100%{ background-position:0 90px; opacity:0 }
+}
+
+/* Marquee separators get a moving locator tick. */
+.marquee{ position:relative }
+.marquee::after{
+  content:""; position:absolute; left:0; top:-1px; width:54px; height:1px;
+  background:linear-gradient(90deg, var(--accent), var(--fx-cyan), transparent);
+  animation:marquee-tick 12s linear infinite; pointer-events:none;
+}
+@keyframes marquee-tick{
+  0%{ transform:translateX(-70px); opacity:0 }
+  12%,80%{ opacity:.85 }
+  100%{ transform:translateX(calc(100vw + 70px)); opacity:0 }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{ animation-duration:.001s !important; animation-iteration-count:1 !important; transition-duration:.001s !important }
+  #site-header::after, .sec-head::before, .sec-head::after, .kicker::before,
+  .p-kicker::after, .hm::before, .p-hero::after, .marquee::after{ animation:none !important }
+  .btn:hover::before, .btn:focus-visible::before{ animation:none }
+}
+
+/* ============================================================
+   Mobile viewport guard
+   The homepage has wider dynamic blocks (hero, stats, marquees) than the
+   inner pages. Keep flex/grid children shrinkable and the hero aligned to
+   the same container width on narrow screens.
+   ============================================================ */
+html, body{ max-width:100%; }
+@media (max-width: 640px){
+  html, body{ width:100%; overflow-x:hidden; }
+  .container{ max-width:100%; min-width:0; }
+  /* The homepage hero used to opt out of the shared container width. Keep
+     that wide block explicitly inside the viewport without changing the
+     established widths of the inner-page layouts. */
+  .head-in, .head-right, .logo, .hero-content, .about-txt, .sec-head,
+  .ggrid, .sv-list, .vgrid, .ch-grid, .pgrid, .contact-top{ min-width:0; }
+  .head-in{ gap:10px; }
+  .head-right{ gap:8px; flex-shrink:0; }
+  .logo{ flex:1 1 auto; overflow:hidden; }
+  .logo img{ flex:0 0 auto; }
+  .lang{ flex-shrink:0; }
+  .lang button{ padding-inline:8px; }
+  #hero .hero-content{ width:calc(100% - 32px); max-width:100%; min-width:0; padding-inline:0; }
+  #hero .hero-kicker{ min-width:0; }
+  #hero .hero-kicker > span:last-child{ min-width:0; overflow-wrap:anywhere; }
+  #hero-title, .hero-sub, .contact-top h2, .about-txt h2, .stats .stat b, .ch .val{ overflow-wrap:anywhere; }
+  .stats{ grid-template-columns:1fr; gap:16px; }
+  .manager{ grid-template-columns:52px minmax(0,1fr); gap:8px 14px; }
+  .manager .avatar{ width:52px; height:52px; }
+}
+
+@media (max-width: 640px){
+  .pmasonry, .masonry{ grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ============================================================
+   Music embeds + futuristic page-title treatment
+   ============================================================ */
+.music-widget-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:16px;
+}
+.music-widget-grid--single{
+  grid-template-columns:minmax(0, 700px);
+  max-width:700px;
+}
+.music-widget{
+  position:relative;
+  min-width:0;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:linear-gradient(145deg, var(--surface), var(--bg2));
+  padding:18px;
+}
+.music-widget::before{
+  content:"";
+  position:absolute;
+  top:-1px; left:0;
+  width:58px; height:1px;
+  background:linear-gradient(90deg, var(--accent), var(--fx-cyan), transparent);
+  transition:width .65s var(--ease);
+}
+.music-widget:hover::before,
+.music-widget:focus-within::before{ width:100%; }
+.music-widget-head{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+  min-height:70px;
+  margin-bottom:14px;
+}
+.music-widget-no{
+  flex:0 0 auto;
+  color:var(--accent);
+  font-family:var(--font-m);
+  font-size:10px;
+  letter-spacing:.13em;
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+}
+.music-widget-head h3{
+  font-family:var(--font-d);
+  font-size:clamp(.9rem, 1.7vw, 1.1rem);
+  line-height:1.15;
+  text-transform:uppercase;
+}
+.music-widget-head p{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:12.5px;
+  line-height:1.45;
+}
+.music-embed-shell{
+  position:relative;
+  overflow:hidden;
+  min-height:420px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#09090b;
+}
+.music-embed-shell--page{ min-height:360px; }
+.music-embed-shell iframe{
+  display:block;
+  width:100%;
+  height:420px;
+  border:0;
+  background:#09090b;
+}
+.music-embed-shell--page iframe{ height:360px; }
+.music-widget-open{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:14px;
+  color:var(--accent);
+  font-family:var(--font-m);
+  font-size:10.5px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  transition:color .3s, transform .3s var(--ease);
+}
+.music-widget-open:hover,
+.music-widget-open:focus-visible{ color:var(--fx-cyan); transform:translateX(4px); }
+
+/* Page titles enter once, then receive a rare split-channel data glitch.
+   The long interval keeps the effect editorial and futuristic rather than
+   turning the heading into constant motion. */
+.p-title{
+  position:relative;
+  isolation:isolate;
+  text-shadow:0 0 22px var(--accent-soft);
+  animation:p-title-entry 1.15s var(--ease-expo) .18s both;
+}
+.p-title::before,
+.p-title::after{
+  content:attr(data-text);
+  position:absolute;
+  z-index:-1;
+  inset:0;
+  display:block;
+  pointer-events:none;
+  color:transparent;
+  -webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1px var(--fx-cyan);
+  opacity:0;
+  will-change:transform, clip-path, opacity;
+}
+.p-title::before{ animation:p-title-glitch-a 13s steps(1,end) 1.6s infinite; }
+.p-title::after{
+  -webkit-text-stroke-color:var(--accent);
+  animation:p-title-glitch-b 13s steps(1,end) 1.6s infinite;
+}
+@keyframes p-title-entry{
+  0%{ opacity:0; transform:translate3d(0,.55em,0); letter-spacing:.12em; filter:blur(8px) brightness(1.8) }
+  58%{ opacity:1; transform:translate3d(0,-.035em,0); letter-spacing:.01em; filter:blur(0) brightness(1.25) }
+  76%{ transform:translate3d(0,.012em,0); filter:brightness(1.05) }
+  100%{ opacity:1; transform:none; letter-spacing:-.015em; filter:none }
+}
+@keyframes p-title-glitch-a{
+  0%,70%,100%{ opacity:0; clip-path:inset(0 0 0 0); transform:none }
+  72%{ opacity:.9; clip-path:inset(8% 0 67% 0); transform:translate3d(-.018em,.01em,0) }
+  74%{ opacity:0; }
+  81%{ opacity:.72; clip-path:inset(63% 0 14% 0); transform:translate3d(.024em,-.008em,0) }
+  83%{ opacity:0; }
+}
+@keyframes p-title-glitch-b{
+  0%,71%,100%{ opacity:0; clip-path:inset(0 0 0 0); transform:none }
+  73%{ opacity:.78; clip-path:inset(38% 0 40% 0); transform:translate3d(.022em,-.01em,0) }
+  75%{ opacity:0; }
+  82%{ opacity:.88; clip-path:inset(17% 0 70% 0); transform:translate3d(-.028em,.006em,0) }
+  84%{ opacity:0; }
+}
+
+@media (max-width: 980px){
+  .music-widget-grid{ grid-template-columns:1fr; }
+  .music-widget-head{ min-height:0; }
+  .music-embed-shell,
+  .music-embed-shell--page{ min-height:300px; }
+  .music-embed-shell iframe,
+  .music-embed-shell--page iframe{ height:300px; }
+}
+@media (prefers-reduced-motion: reduce){
+  .music-widget,
+  .music-widget::before,
+  .music-widget-open{ transition:none !important; }
+  .p-title{ animation:none !important; opacity:1; transform:none; filter:none; }
+  .p-title::before,
+  .p-title::after{ display:none; animation:none !important; }
+}
+
+/* Official Yandex playlist embed dimensions, kept tall enough for its
+   playlist controls while remaining fluid in the responsive shell. */
+.music-embed-shell.music-embed-shell--yandex{
+  min-height:556px;
+}
+.music-embed-shell.music-embed-shell--yandex iframe{
+  width:100%;
+  height:556px;
 }
