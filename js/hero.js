@@ -113,7 +113,10 @@ async function initSlides() {
     if (!photos.length) return;   /* aurora stays on */
     /* use canvas-generated 1600px thumbnails — light on the network */
     const urls = await Promise.all(photos.map(async (p) => {
-      try { return await getThumbUrl(p, 1600); } catch (_) { return null; }
+      /* A hero thumbnail is an optimization, never a prerequisite for the
+         local photo. This also keeps mobile Safari useful if canvas or
+         ImageBitmap generation is unavailable. */
+      try { return await getThumbUrl(p, 1600); } catch (_) { return p.url; }
     }));
     slideUrls = urls.filter(Boolean);
     if (!slideUrls.length) return;
@@ -137,6 +140,7 @@ async function initSlides() {
 const GLYPHS = {
   ru: 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЫЭЮЯ·—/\\|▮',
   en: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ·—/\\|▮#*+',
+  es: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ·—/\\|▮#*+',
 };
 function scramble(lineEl, text, delay) {
   if (reduceMotion) { lineEl.textContent = text; return; }

@@ -78,12 +78,19 @@
       }
     }
 
+    function relativePath(file) {
+      const rel = file.webkitRelativePath || file.name;
+      const parts = rel.split('/').filter(Boolean);
+      /* webkitdirectory includes the selected folder itself; the manifest
+         is uploaded inside that folder, so remove this leading component. */
+      return file.webkitRelativePath && parts.length > 1 ? parts.slice(1).join('/') : (parts[0] || file.name);
+    }
+
     input.addEventListener('change', () => {
       files.length = 0;
       const list = Array.from(input.files || []);
       for (const f of list) {
-        const rel = f.webkitRelativePath || f.name;
-        if (IMG.test(f.name)) files.push({ path: rel, date: new Date(f.lastModified).toISOString() });
+        if (IMG.test(f.name)) files.push({ path: relativePath(f), date: new Date(f.lastModified).toISOString() });
       }
       refresh();
     });
@@ -98,7 +105,7 @@
       const items = e.dataTransfer && e.dataTransfer.items;
       if (items && items.length && items[0].webkitGetAsEntry) {
         files.length = 0;
-        walk(items[0].webkitGetAsEntry());
+        walk(items[0].webkitGetAsEntry(), '', refresh);
       } else {
         files.length = 0;
         for (const f of e.dataTransfer.files) if (IMG.test(f.name)) files.push({ path: f.name, date: new Date(f.lastModified).toISOString() });
@@ -106,14 +113,22 @@
       }
     });
 
-    function walk(entry, cb) {
-      entry.file ? (entry.file((f) => {
-        if (IMG.test(f.name)) files.push({ path: entry.name, date: new Date(f.lastModified).toISOString() });
-        cb && cb();
-      })) : (entry.createReader().readEntries((es) => {
+    function walk(entry, prefix, cb) {
+      const path = prefix ? `${prefix}/${entry.name}` : entry.name;
+      if (entry.file) {
+        entry.file((f) => {
+          if (IMG.test(f.name)) files.push({ path: path, date: new Date(f.lastModified).toISOString() });
+          cb && cb();
+        });
+        return;
+      }
+      entry.createReader().readEntries((es) => {
         let n = es.length;
-        for (const x of es) walk(x, () => { if (--n === 0) cb && cb(); });
-      }));
+        if (!n) { cb && cb(); return; }
+        /* The dropped folder itself is not part of the manifest path. */
+        const childPrefix = prefix ? path : '';
+        for (const x of es) walk(x, childPrefix, () => { if (--n === 0) cb && cb(); });
+      });
     }
 
     function manifest() {

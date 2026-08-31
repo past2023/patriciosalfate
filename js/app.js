@@ -97,14 +97,22 @@ function fillStaticContent() {
       .then((res) => {
         const first = res.photos[0];
         if (!first) throw new Error('empty about folder');
-        return getThumbUrl(first, 1100).then((url) => {
-          const img = document.createElement('img');
-          img.src = url;
-          img.alt = '';
-          img.loading = 'lazy';
-          img.onload = () => img.classList.add('ld');
-          frame.appendChild(img);
-        });
+        return getThumbUrl(first, 1100)
+          .catch(() => first.url)
+          .then((url) => {
+            const img = document.createElement('img');
+            img.alt = '';
+            img.loading = 'lazy';
+            img.onload = () => img.classList.add('ld');
+            img.onerror = () => {
+              if (url !== first.url) {
+                img.onerror = null;
+                img.src = first.url;
+              }
+            };
+            img.src = url;
+            frame.appendChild(img);
+          });
       })
       .catch(() => frame.classList.add('noimg'));
   }

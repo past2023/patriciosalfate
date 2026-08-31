@@ -16,10 +16,18 @@ async function fillInlinePreview(gallerySlug, fig) {
     const entry = await peekGallery(gallerySlug);
     const first = entry && entry.photos && entry.photos[0];
     if (!first) return;
-    const url = await getThumbUrl(first, 800);
+    let url = first.url;
+    try { url = await getThumbUrl(first, 800); } catch (_) { /* original is the fallback */ }
     const img = document.createElement('img');
-    img.src = url;
     img.alt = '';
+    img.onload = () => img.classList.add('ld');
+    img.onerror = () => {
+      if (url !== first.url) {
+        img.onerror = null;
+        img.src = first.url;
+      }
+    };
+    img.src = url;
     fig.appendChild(img);
   } catch (_) {}
 }

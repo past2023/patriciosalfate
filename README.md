@@ -12,7 +12,7 @@ background) and back — the choice is remembered in the browser.
 
 ## 📄 Pages
 
-The site has five full pages (same design system, RU/EN, both themes):
+The site has five full pages (same design system, RU/EN/ES, both themes):
 
 | Page | URL | Content |
 |---|---|---|
@@ -20,33 +20,33 @@ The site has five full pages (same design system, RU/EN, both themes):
 | Interior photography | `/интерьерная_фотосъемка/` | Airbnb-certified interior/architecture shoots, gallery |
 | Web Design | `/веб-дизайн/` | full-cycle web development + selected client websites |
 | CV | `/cv/` | profile, skills, experience, education, languages, music, links |
-| Music | `/music/` | artist Patricio Salfate — direct links to Spotify, Apple Music, VK Music, Yandex Music, Deezer, Bandcamp |
+| Music | `/music/` | artist Patricio Salfate — official Yandex Music playlist widget, alongside Spotify, Apple Music, VK Music, Deezer and Bandcamp links |
 
-Photo-day and interior galleries use the same one-update system: their photos
-live in `photos/photonday/` and `photos/interior/` (currently bridged to the
-old site via `manifest.json`; uploaded files win by name).
+The Music page embeds the verified Yandex Music playlist widget for
+“Best of Patricio Salfate”. Apple Music and VK Music remain available through
+their direct platform cards. No provider IDs are guessed in the markup.
+
+Photo-day and interior galleries use the same update system: their photos
+live in `photos/photonday/` and `photos/interior/`. Each gallery folder also
+ships with a local `manifest.json` fallback for hosts that do not expose a
+directory listing; live directory files still win by name when listing works.
 
 To add a page: copy any `cv/index.html`-style page, add its texts to
 `js/i18n.js` and a link to the header nav.
 
-## 📦 Photos from the previous site (temporary bridge)
+## 📦 Photos and gallery manifests
 
-The folders `photos/{photo,fashion,hero,about}/` contain a `manifest.json`
-with hotlinks to the real photos on the old site (patriciosalfate.ru), so the
-site already shows the actual work. **Any file you upload always wins over a
-manifest entry with the same file name.** Once all your photos are uploaded
-into the folders, simply delete the four `manifest.json` files — the site
-keeps working purely from the folder contents.
-
-The same bridge pattern is used for the header logo (hotlinked from the old
-site — see below), the page heroes and the page photo galleries.
+The gallery folders contain local `manifest.json` fallbacks so the included
+photos still appear on hosts where directory listing is disabled. **Any file
+you upload always wins over a manifest entry with the same file name** when a
+live listing is available. The `photos/about/manifest.json` file is a small
+portrait fallback; the other manifests list the local gallery assets.
 
 ## 🏷️ Logo
 
-The header logo is hotlinked from the old site. To make it live on the new
-hosting, download `logoamor01.jpg` and save it as `img/logo.jpg` — the site
-automatically switches to the local file. If the image ever fails to load,
-a "PS" monogram fallback is shown.
+The header logo is served locally from `photos/logoamor01.jpg`. Replace that
+file with your own logo if needed. If the image ever fails to load, a "PS"
+monogram fallback is shown.
 
 ---
 
@@ -57,25 +57,30 @@ hosting:
 
 ```
 photos/
-├── photo/     → "Photography" gallery (portraits, interiors)
+├── portraits/ → "Portraits" gallery
 ├── fashion/   → "Fashion & commercial" gallery
-├── design/    → "Design & branding" gallery
+├── interior/  → "Interiors" gallery
+├── branding/  → "Design & branding" gallery
+├── design/    → "Design" gallery
 ├── hero/      → main-screen slideshow (wide 16:9 photos)
 └── about/     → first photo = portrait in the "About" block
 ```
 
 Drop JPG/PNG/WebP files into the file manager and:
 
-1. the site **finds them on its own** (reads the hosting directory listing —
-   names, sizes, dates);
-2. **thumbnails are drawn in the visitor's browser** on `<canvas>` and cached
+1. on a host with directory listing enabled, the site **finds them on its own**
+   (names, sizes and dates);
+2. on a host without listing, regenerate that gallery's `manifest.json` with
+   `tools/manifest.html` after uploading new files;
+3. **thumbnails are drawn in the visitor's browser** on `<canvas>` and cached
    in IndexedDB — nothing is generated on the server;
-3. new work **appears first** (sorted by file date); counters and the
+4. new work **appears first** (sorted by file date); counters and the
    "updated" dates recalculate automatically;
-4. subfolders inside a gallery are picked up too (up to 3 levels) — handy for
-   sorting shoots by date.
+5. subfolders inside a gallery are picked up too (up to 3 levels) when listing
+   is enabled — handy for sorting shoots by date.
 
-No "rebuild", no "upload a new file", no "edit a JSON" — **one folder, one system**.
+No rebuild is needed. A listing-enabled host needs only the photo upload; a
+host without listing needs the updated manifest uploaded alongside the photos.
 
 ### How it works, technically
 
@@ -89,9 +94,9 @@ Thumbnail = original → `createImageBitmap` → `<canvas>` → WebP → Indexed
 
 | Hosting | What is needed |
 |---|---|
-| **Apache** (Reg.ru, Beget, Timeweb, cPanel, most .ru hosts) | **Nothing.** `photos/.htaccess` with `Options +Indexes` and UTF-8 is already shipped. |
-| **Nginx** | One line in the site config (see below). |
-| **Static hosts** (Pages/Netlify/Vercel, etc., no listing) | Generate a `manifest.json` with [tools/manifest.html](tools/manifest.html) and put it into the gallery folder. |
+| **Apache** (Reg.ru, Beget, Timeweb, cPanel, most .ru hosts) | Upload the hidden `photos/.htaccess` file too. It enables `Options +Indexes` and UTF-8 listing for automatic updates. |
+| **Nginx** | Enable `autoindex on` in the site config (see below) for automatic updates. |
+| **Static hosts** (Pages/Netlify/Vercel, etc., no listing) | The shipped manifests show the included photos; regenerate one with [tools/manifest.html](tools/manifest.html) after adding photos. |
 
 **Nginx** — add to `server { ... }`:
 
@@ -102,13 +107,13 @@ location /photos/ {
 }
 ```
 
-**Static hosting without listing** — open `tools/manifest.html` in the
-browser, select the photo folder (files are never sent anywhere), download
-the `manifest.json` and upload it into the gallery folder (e.g.
-`photos/photo/manifest.json`). A manifest may also contain **remote (absolute)
-URLs** — that is exactly how the temporary bridge to the old site works.
-When a directory listing is available, it is **merged** with the manifest and
-local files win by name.
+**Hosting without listing** — the repository already includes manifests for
+its local galleries. After adding or replacing photos on such a host, open
+`tools/manifest.html` in the browser, select the photo folder (files are never
+sent anywhere), download the new `manifest.json`, and upload it into that
+folder. A manifest may also contain **remote (absolute) URLs** when a project
+needs them. When a directory listing is available, it is **merged** with the
+manifest and local files win by name.
 
 ---
 
@@ -121,11 +126,11 @@ node server/preview.mjs
 ```
 
 **Deploy:** upload the whole repository content to the site root
-(`public_html` / `www`), including the hidden `photos/.htaccess`.
-Done — `https://patriciosalfate.ru`.
+(`public_html` / `www`), including hidden files such as `photos/.htaccess` and
+the gallery `manifest.json` files. Done — `https://patriciosalfate.ru`.
 
-> `photos/design/` ships with 4 demo layout mockups — replace them with your
-> own work (upload yours and delete `design_*.jpg`).
+> `photos/design/` is the dedicated Design gallery on the homepage. It ships
+> with 4 layout mockups — replace or extend them with your own work at any time.
 
 ## 📁 Structure
 
@@ -134,7 +139,7 @@ index.html          — the whole site (one page, anchor sections)
 404.html            — custom 404 page (canvas stars)
 css/main.css        — design system (colors at the top: :root + html.light)
 js/config.js        — SETTINGS: galleries, services, videos, contacts
-js/i18n.js          — ALL texts RU/EN (edit here)
+js/i18n.js          — ALL texts RU/EN/ES (edit here)
 js/listing.js       — auto-update engine (directory-listing parser)
 js/thumb.js         — canvas thumbnails + IndexedDB cache
 js/hero.js          — theme-aware canvas aurora + slideshow + scramble
@@ -155,7 +160,7 @@ photos/             ← UPLOAD YOUR PHOTOS HERE
 
 ## ✏️ What to change where
 
-- **Texts (RU/EN)** — `js/i18n.js` (every string exists in both languages).
+- **Texts (RU/EN/ES)** — `js/i18n.js` (every current UI string exists in all three languages; Spanish falls back to English for future keys).
 - **Galleries** — `js/config.js` → `galleries: [{ slug: 'photo', span: 'a' }]`
   (span: `a` = vertical card 4:5, `b` = horizontal 3:2).
   Gallery texts — `js/i18n.js` → `gallery.<slug>.title/desc`.
@@ -173,15 +178,17 @@ photos/             ← UPLOAD YOUR PHOTOS HERE
 
 ## 🧠 Features
 
-- **Canvas lightbox**: smooth wheel zoom (towards the cursor), drag-pan,
-  pinch on phones, double click, keys ←/→/Esc/+/-/0, "download original".
+- **Canvas lightbox**: opens with the complete uncropped photo (with an
+  optional immersive edge-to-edge fill toggle), smooth wheel/button zoom
+  towards the cursor, drag-pan, pinch on phones, double click, keys
+  ←/→/Esc/+/-/0, keyboard-friendly controls and "download original".
 - **Hero slideshow** from `photos/hero` with Ken Burns; if the folder is
   empty — canvas aurora.
 - **Laser sweep** across the hero photo and over work cards on hover —
   the modern replacement for film grain.
 - **Themes**: dark by default, light via the toggle — both are remembered.
-- **RU/EN** — the default is **RU**; EN only when the user clicks the
-  button (the choice is remembered), `?lang=en` works by link.
+- **RU/EN/ES** — the default is **RU**; EN or ES when the user clicks the
+  selector (the choice is remembered), `?lang=en` and `?lang=es` work by link.
 - **Animations**: preloader with counter, scramble headline, laser sweep,
   scroll reveals, parallax, magnetic buttons, marquees, custom cursor.
 - **Accessibility**: `prefers-reduced-motion` disables animations, semantic

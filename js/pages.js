@@ -34,21 +34,53 @@ async function initPhotoGrid(sel, folder) {
     if (!photos.length) { grid.remove(); return; }
     photos.forEach((p, i) => {
       const fig = document.createElement('figure');
-      fig.innerHTML = '<span class="skel"></span><img alt="" loading="lazy" decoding="async">';
+      fig.innerHTML = `<span class="skel"></span><img alt="" loading="${i < 3 ? 'eager' : 'lazy'}" decoding="async">`;
       grid.appendChild(fig);
+      const img = fig.querySelector('img');
+      const revealImage = () => {
+        fig.querySelector('.skel')?.remove();
+        img.classList.add('ld');
+        setSpan(fig);
+      };
+      const showImage = (src) => {
+        /* Attach listeners before assigning src. On mobile, a cached image can
+           complete synchronously and otherwise remain behind the skeleton. */
+        img.onload = revealImage;
+        img.onerror = () => {
+          if (src !== p.url) {
+            img.onerror = null;
+            img.src = p.url;
+            return;
+          }
+          /* Do not leave a failed tile looking like an endless loader. */
+          fig.querySelector('.skel')?.remove();
+          fig.classList.add('is-unavailable');
+        };
+        img.src = src;
+        /* Safari can have a decoded cached image ready before the event is
+           delivered. Explicitly reveal it so mobile tiles cannot stay black. */
+        if (img.complete && img.naturalWidth) revealImage();
+      };
+      /* Show the real file immediately; a generated canvas thumbnail replaces
+         it when ready. This keeps the gallery usable on mobile browsers whose
+         canvas/ImageBitmap pipeline is slow or unavailable. */
+      showImage(p.url);
       getThumbUrl(p, 700)
         .then((url) => {
-          const img = fig.querySelector('img');
-          img.src = url;
-          img.onload = () => {
-            fig.querySelector('.skel')?.remove();
-            img.classList.add('ld');
-            setSpan(fig);
-          };
-          img.onerror = () => fig.remove();
+          if (url !== p.url) showImage(url);
         })
-        .catch(() => fig.remove());
-      fig.addEventListener('click', () => lb.openPhotos(photos, i));
+        .catch(() => {});
+      const openPhoto = () => lb.openPhotos(photos, i);
+      fig.addEventListener('click', openPhoto);
+      fig.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openPhoto();
+        }
+      });
+      fig.tabIndex = 0;
+      fig.setAttribute('role', 'button');
+      fig.setAttribute('aria-label', p.name);
     });
 
     /* keep spans correct when the responsive column width changes */
