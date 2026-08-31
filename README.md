@@ -20,7 +20,12 @@ The site has five full pages (same design system, RU/EN/ES, both themes):
 | Interior photography | `/интерьерная_фотосъемка/` | Airbnb-certified interior/architecture shoots, gallery |
 | Web Design | `/веб-дизайн/` | full-cycle web development + selected client websites |
 | CV | `/cv/` | profile, skills, experience, education, languages, music, links |
-| Music | `/music/` | artist Patricio Salfate — direct links to Spotify, Apple Music, VK Music, Yandex Music, Deezer, Bandcamp |
+| Music | `/music/` | artist Patricio Salfate — official Apple Music embed plus direct Yandex Music and VK Music panels/fallbacks, alongside Spotify, Deezer and Bandcamp links |
+
+The Music page uses the verified Apple Music artist embed. Yandex Music and VK Music
+are linked through their official artist/search pages when a provider does not expose
+a verified embeddable artist or playlist ID; the direct platform cards remain visible
+as reliable fallbacks. No provider IDs are guessed in the markup.
 
 Photo-day and interior galleries use the same update system: their photos
 live in `photos/photonday/` and `photos/interior/`. Each gallery folder also
@@ -135,7 +140,7 @@ index.html          — the whole site (one page, anchor sections)
 404.html            — custom 404 page (canvas stars)
 css/main.css        — design system (colors at the top: :root + html.light)
 js/config.js        — SETTINGS: galleries, services, videos, contacts
-js/i18n.js          — ALL texts RU/EN (edit here)
+js/i18n.js          — ALL texts RU/EN/ES (edit here)
 js/listing.js       — auto-update engine (directory-listing parser)
 js/thumb.js         — canvas thumbnails + IndexedDB cache
 js/hero.js          — theme-aware canvas aurora + slideshow + scramble

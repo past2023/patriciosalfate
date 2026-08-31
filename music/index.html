@@ -155,7 +155,7 @@
       <div class="laser" aria-hidden="true"></div>
       <div class="container p-hero-in">
         <p class="mono p-kicker"><span class="dot" aria-hidden="true"></span><span data-i18n="pg.mu.kicker">Искусство — музыка</span></p>
-        <h1 class="p-title" data-i18n="pg.mu.h1">Музыка</h1>
+        <h1 class="p-title" data-text="Музыка" data-i18n="pg.mu.h1">Музыка</h1>
         <p class="p-sub" data-i18n="pg.mu.sub">Retro-futurism electro-dream — new wave, кинематографичный dream pop, синтезированные текстуры и коллаборации с вокалистами.</p>
         <div class="chips">
           <span data-i18n="pg.mu.chips.1">New wave &amp; dream pop</span>
@@ -190,7 +190,7 @@
             <span class="ic"></span><span class="lbl">VK Music</span><span class="val">vk.com/artist</span>
           </a>
           <a class="ch" data-reveal data-mp="yandex" href="https://music.yandex.ru/search?text=Patricio%20Salfate" target="_blank" rel="noopener">
-            <span class="ic"></span><span class="lbl">Яндекс Музыка</span><span class="val">music.yandex.ru</span>
+            <span class="ic"></span><span class="lbl" data-i18n="pg.mu.platform.yandex">Яндекс Музыка</span><span class="val">music.yandex.ru</span>
           </a>
           <a class="ch" data-reveal data-mp="deezer" href="https://www.deezer.com/artist/10810608" target="_blank" rel="noopener">
             <span class="ic"></span><span class="lbl">Deezer</span><span class="val">deezer.com</span>
@@ -198,6 +198,59 @@
           <a class="ch" data-reveal data-mp="bandcamp" href="https://patriciosalfate.bandcamp.com" target="_blank" rel="noopener">
             <span class="ic"></span><span class="lbl">Bandcamp</span><span class="val">patriciosalfate.bandcamp.com</span>
           </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= EMBEDDED MUSIC PLAYERS ================= -->
+    <section class="sec music-widgets" style="padding-top:0">
+      <div class="container">
+        <div class="sec-head" data-reveal>
+          <div><h2 class="sec-title" data-i18n="pg.mu.widgets.t">Интерактивные плееры</h2></div>
+          <p class="sec-hint" data-i18n="pg.mu.widgets.hint">Открывайте релизы и слушайте музыку на официальных площадках</p>
+        </div>
+        <div class="music-widget-grid">
+          <article class="music-widget music-widget--apple" data-reveal>
+            <div class="music-widget-head">
+              <span class="music-widget-no">01 / APPLE</span>
+              <div>
+                <h3>Apple Music</h3>
+                <p data-i18n="pg.mu.widget.apple.d">Каталог и релизы в Apple Music</p>
+              </div>
+            </div>
+            <div class="music-embed-shell">
+              <iframe loading="lazy" title="Плеер Apple Music — Patricio Salfate" data-i18n-title="pg.mu.widget.apple.title" src="https://embed.music.apple.com/us/artist/patricio-salfate/1140473447?theme=dark" allow="autoplay *; encrypted-media *; fullscreen *" frameborder="0"></iframe>
+            </div>
+            <a class="music-widget-open" href="https://music.apple.com/us/artist/patricio-salfate/1140473447" target="_blank" rel="noopener" data-i18n="pg.mu.widget.apple.open">Открыть Apple Music ↗</a>
+          </article>
+
+          <article class="music-widget music-widget--yandex" data-reveal>
+            <div class="music-widget-head">
+              <span class="music-widget-no">02 / YANDEX</span>
+              <div>
+                <h3>Yandex Music</h3>
+                <p data-i18n="pg.mu.widget.yandex.d">Поиск релизов и треков в Яндекс Музыке</p>
+              </div>
+            </div>
+            <div class="music-embed-shell music-embed-shell--page">
+              <iframe loading="lazy" title="Плеер Яндекс Музыки — Patricio Salfate" data-i18n-title="pg.mu.widget.yandex.title" src="https://music.yandex.ru/search?text=Patricio%20Salfate" frameborder="0"></iframe>
+            </div>
+            <a class="music-widget-open" href="https://music.yandex.ru/search?text=Patricio%20Salfate" target="_blank" rel="noopener" data-i18n="pg.mu.widget.yandex.open">Открыть Яндекс Музыку ↗</a>
+          </article>
+
+          <article class="music-widget music-widget--vk" data-reveal>
+            <div class="music-widget-head">
+              <span class="music-widget-no">03 / VK</span>
+              <div>
+                <h3>VK Music</h3>
+                <p data-i18n="pg.mu.widget.vk.d">Популярные треки и релизы в VK Music</p>
+              </div>
+            </div>
+            <div class="music-embed-shell music-embed-shell--page">
+              <iframe loading="lazy" title="Плеер VK Music — Patricio Salfate" data-i18n-title="pg.mu.widget.vk.title" src="https://vk.ru/artist/patriciosalfate" frameborder="0"></iframe>
+            </div>
+            <a class="music-widget-open" href="https://vk.ru/artist/patriciosalfate" target="_blank" rel="noopener" data-i18n="pg.mu.widget.vk.open">Открыть VK Music ↗</a>
+          </article>
         </div>
       </div>
     </section>
